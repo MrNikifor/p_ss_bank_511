@@ -24,6 +24,9 @@ public class Registration {
     private String country;
 
     @Size(max = 160)
+    private String region;
+
+    @Size(max = 160)
     private String city;
 
     @Size(max = 160)
