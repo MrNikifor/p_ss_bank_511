@@ -2,10 +2,15 @@ package com.bank.profile.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -35,10 +40,13 @@ public class Profile {
     @Column(unique = true)
     private Long snils;
 
-    @Column(name = "passport_id", nullable = false)
-    private Long passportId;
+    @OneToOne(optional = false)
+    @JoinColumn(name = "passport_id", nullable = false)
+    private Passport passportId;
 
-    @Column(name = "actual_registration_id")
-    private Long actualRegistrationId;
+    @OneToOne
+    @JoinColumn(name = "actual_registration_id")
+//    @NotFound(action= NotFoundAction.IGNORE)
+    private ActualRegistration actualRegistrationId;
 
 }

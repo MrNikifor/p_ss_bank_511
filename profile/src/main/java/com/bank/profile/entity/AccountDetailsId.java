@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -22,6 +24,7 @@ public class AccountDetailsId {
     @Column(name = "account_id")
     private Long accountId;
 
-    @Column(name = "profile_id")
-    private Long profileId;
+    @ManyToOne
+    @JoinColumn(name = "profile_id")
+    private Profile profileId;
 }

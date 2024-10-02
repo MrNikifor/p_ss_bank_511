@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -61,8 +64,9 @@ public class Passport {
     @Column(name = "expiration_date", nullable = true)
     private LocalDate expirationDate;
 
-    @Column(name = "registration_id")
-    private Long registrationId;
+    @OneToOne(optional = false)
+    @JoinColumn(name = "registration_id")
+    private Registration registrationId;
 
     @AllArgsConstructor
     @Getter
