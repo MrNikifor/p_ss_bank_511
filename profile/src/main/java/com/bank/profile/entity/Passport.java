@@ -21,6 +21,7 @@ import java.time.LocalDate;
 @Table(name = "passport")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @NotNull
 public class Passport {
 

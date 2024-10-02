@@ -1,5 +1,6 @@
 package com.bank.profile.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +18,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "account_details_id")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @NotNull
 public class AccountDetailsId {
 

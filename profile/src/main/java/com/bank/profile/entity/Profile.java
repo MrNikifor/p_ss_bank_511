@@ -1,5 +1,6 @@
 package com.bank.profile.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +18,7 @@ import javax.validation.constraints.Size;
 @Table(name = "profile")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Profile {
 
     @Id
