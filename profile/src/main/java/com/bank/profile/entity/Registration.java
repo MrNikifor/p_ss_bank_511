@@ -54,6 +54,4 @@ public class Registration {
 
     @Column(nullable = false)
     private Long index;
-
-    //видимо удалить столбец Column
 }
