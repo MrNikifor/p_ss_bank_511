@@ -1,6 +1,6 @@
 package com.bank.profile.dto;
 
-import com.bank.profile.entity.Passport;
+import com.bank.profile.entity.exact.Passport;
 import lombok.Data;
 
 @Data

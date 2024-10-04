@@ -1,11 +1,9 @@
 package com.bank.profile.dto;
 
-import com.bank.profile.entity.Passport;
-import com.bank.profile.entity.Registration;
+import com.bank.profile.entity.exact.Passport;
+import com.bank.profile.entity.exact.Registration;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Data

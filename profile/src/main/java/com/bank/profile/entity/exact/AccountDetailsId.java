@@ -1,5 +1,6 @@
-package com.bank.profile.entity;
+package com.bank.profile.entity.exact;
 
+import com.bank.profile.entity.AbstractEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @NotNull
-public class AccountDetailsId {
+public class AccountDetailsId extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,5 +1,6 @@
-package com.bank.profile.entity;
+package com.bank.profile.entity.exact;
 
+import com.bank.profile.entity.AbstractEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -23,7 +24,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @NotNull
-public class Passport {
+public class Passport extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,24 +1,7 @@
 package com.bank.profile.util;
 
-import com.bank.profile.dto.PassportDTO;
-import com.bank.profile.dto.ProfileDTO;
-import com.bank.profile.dto.RegistrationDTO;
-import com.bank.profile.entity.Passport;
-import com.bank.profile.entity.Profile;
-import com.bank.profile.entity.Registration;
-import com.bank.profile.mappers.exact.PassportMapper;
-import com.bank.profile.mappers.exact.ProfileMapper;
-import com.bank.profile.mappers.exact.RegistrationMapper;
-import com.bank.profile.service.generics.CrudService;
-import com.bank.profile.service.interfaces.PassportService;
-import com.bank.profile.service.interfaces.ProfileService;
-import com.bank.profile.service.interfaces.RegistrationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDate;
 
 @Component
 @RequiredArgsConstructor

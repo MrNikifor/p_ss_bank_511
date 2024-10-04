@@ -1,4 +1,4 @@
-package com.bank.profile.mappers;
+package com.bank.profile.mappers.generics;
 
 import org.springframework.stereotype.Component;
 

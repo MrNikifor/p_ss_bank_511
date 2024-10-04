@@ -1,8 +1,8 @@
-package com.bank.profile.mappers.exact;
+package com.bank.profile.mappers;
 
 import com.bank.profile.dto.ProfileDTO;
-import com.bank.profile.entity.Profile;
-import com.bank.profile.mappers.BaseMapper;
+import com.bank.profile.entity.exact.Profile;
+import com.bank.profile.mappers.generics.BaseMapper;
 import com.bank.profile.mappers.config.MapStructConfig;
 import org.mapstruct.Mapper;
 
