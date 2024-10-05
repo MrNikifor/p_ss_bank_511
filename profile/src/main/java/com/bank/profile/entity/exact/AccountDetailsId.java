@@ -16,7 +16,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "account_details_id")
+@Table(name = "account_details_id", schema = "profile")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

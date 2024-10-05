@@ -16,7 +16,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "profile")
+@Table(name = "profile", schema = "profile")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

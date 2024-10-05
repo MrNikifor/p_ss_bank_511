@@ -19,7 +19,7 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "passport")
+@Table(name = "passport", schema = "profile")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
