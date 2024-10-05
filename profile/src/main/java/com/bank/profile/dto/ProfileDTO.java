@@ -1,6 +1,7 @@
 package com.bank.profile.dto;
 
-import com.bank.profile.entity.exact.Passport;
+import com.bank.profile.entity.ActualRegistration;
+import com.bank.profile.entity.Passport;
 import lombok.Data;
 
 @Data
@@ -10,5 +11,6 @@ public class ProfileDTO {
     private String nameOnCard;
     private Long inn;
     private Long snils;
-    private Passport passport;
+    private Passport passportId;
+    private ActualRegistration actualRegistrationId;
 }

@@ -1,29 +1,28 @@
 package com.bank.profile.util;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class ApplicationRunnerImpl
-        //implements ApplicationRunner
+public class ApplicationRunnerImpl implements ApplicationRunner
 {
 
-//    private final CrudService<ProfileDTO> profileService;
-//    private final CrudService<RegistrationDTO> registrationService;
-//    private final CrudService<PassportDTO> passportService;
+//    private final BaseCrudService<ProfileDTO> profileService;
+//    private final BaseCrudService<RegistrationDTO> registrationService;
+//    private final BaseCrudService<PassportDTO> passportService;
 //
 //    private final ProfileMapper profileMapper;
 //    private final RegistrationMapper registrationMapper;
 //    private final PassportMapper passportMapper;
-//
-//    @Override
-//    public void run(ApplicationArguments args) throws Exception {
-//        RegistrationDTO registrationDTO = createTestRegistration();
-//        PassportDTO passportDTO = createTestPassport(registrationDTO);
-//        createTestProfile(passportDTO);
-//    }
-//
+
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        //createTestProfile(createTestPassport(createTestRegistration()));
+    }
+
 //    public ProfileDTO createTestProfile(PassportDTO passport){
 //        Profile testProfile = new Profile();
 //        testProfile.setPhoneNumber(8005553535L);

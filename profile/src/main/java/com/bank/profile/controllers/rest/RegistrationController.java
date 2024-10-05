@@ -2,7 +2,7 @@ package com.bank.profile.controllers.rest;
 
 import com.bank.profile.controllers.rest.generics.AbstractController;
 import com.bank.profile.dto.RegistrationDTO;
-import com.bank.profile.entity.exact.Registration;
+import com.bank.profile.entity.Registration;
 import com.bank.profile.mappers.RegistrationMapper;
 import com.bank.profile.service.RegistrationService;
 import org.springframework.web.bind.annotation.RequestMapping;

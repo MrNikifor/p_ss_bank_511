@@ -2,7 +2,7 @@ package com.bank.profile.controllers.rest;
 
 import com.bank.profile.controllers.rest.generics.AbstractController;
 import com.bank.profile.dto.PassportDTO;
-import com.bank.profile.entity.exact.Passport;
+import com.bank.profile.entity.Passport;
 import com.bank.profile.mappers.PassportMapper;
 import com.bank.profile.service.PassportService;
 import org.springframework.web.bind.annotation.RequestMapping;

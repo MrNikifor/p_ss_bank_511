@@ -1,7 +1,6 @@
-package com.bank.profile.entity;
+package com.bank.profile.entity.abstracts;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.GeneratedValue;

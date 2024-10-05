@@ -1,6 +1,6 @@
 package com.bank.profile.controllers.rest.generics;
 
-import com.bank.profile.entity.AbstractEntity;
+import com.bank.profile.entity.abstracts.AbstractEntity;
 import com.bank.profile.mappers.generics.BaseMapper;
 import com.bank.profile.service.generics.BaseCrudService;
 import lombok.AllArgsConstructor;
@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;

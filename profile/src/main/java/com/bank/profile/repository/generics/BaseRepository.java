@@ -1,6 +1,6 @@
 package com.bank.profile.repository.generics;
 
-import com.bank.profile.entity.AbstractEntity;
+import com.bank.profile.entity.abstracts.AbstractEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 

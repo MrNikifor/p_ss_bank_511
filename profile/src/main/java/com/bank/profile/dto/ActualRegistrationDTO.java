@@ -3,7 +3,7 @@ package com.bank.profile.dto;
 import lombok.Data;
 
 @Data
-public class RegistrationDTO {
+public class ActualRegistrationDTO {
     private String country;
     private String region;
     private String city;

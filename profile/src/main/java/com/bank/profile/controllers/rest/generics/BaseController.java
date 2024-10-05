@@ -1,6 +1,6 @@
 package com.bank.profile.controllers.rest.generics;
 
-import com.bank.profile.entity.AbstractEntity;
+import com.bank.profile.entity.abstracts.AbstractEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

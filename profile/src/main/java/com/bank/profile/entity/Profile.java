@@ -1,6 +1,6 @@
-package com.bank.profile.entity.exact;
+package com.bank.profile.entity;
 
-import com.bank.profile.entity.AbstractEntity;
+import com.bank.profile.entity.abstracts.AbstractEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

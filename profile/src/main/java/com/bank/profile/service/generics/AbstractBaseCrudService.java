@@ -1,6 +1,6 @@
 package com.bank.profile.service.generics;
 
-import com.bank.profile.entity.AbstractEntity;
+import com.bank.profile.entity.abstracts.AbstractEntity;
 import com.bank.profile.mappers.generics.BaseMapper;
 import com.bank.profile.repository.generics.BaseRepository;
 import lombok.AllArgsConstructor;

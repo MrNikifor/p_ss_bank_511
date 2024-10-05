@@ -1,7 +1,7 @@
 package com.bank.profile.service;
 
 import com.bank.profile.dto.PassportDTO;
-import com.bank.profile.entity.exact.Passport;
+import com.bank.profile.entity.Passport;
 import com.bank.profile.mappers.PassportMapper;
 import com.bank.profile.repository.PassportRepository;
 import com.bank.profile.service.generics.AbstractBaseCrudService;
