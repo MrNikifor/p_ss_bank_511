@@ -1,5 +1,6 @@
 package com.bank.profile.entity;
 
+import com.bank.profile.entity.abstracts.AbstractEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,7 @@ import java.time.LocalDate;
 @NonNull
 @NoArgsConstructor
 @AllArgsConstructor
-public class Audit {
+public class Audit extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

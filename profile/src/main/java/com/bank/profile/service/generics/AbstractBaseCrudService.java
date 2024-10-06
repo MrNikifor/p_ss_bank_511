@@ -4,11 +4,14 @@ import com.bank.profile.entity.abstracts.AbstractEntity;
 import com.bank.profile.mappers.generics.BaseMapper;
 import com.bank.profile.repository.generics.BaseRepository;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 @AllArgsConstructor
+@Data
 public abstract class AbstractBaseCrudService<
         ENTITY extends AbstractEntity,
         DTO,
@@ -44,5 +47,9 @@ public abstract class AbstractBaseCrudService<
     @Transactional
     public void delete(Long id) {
         repository.deleteById(id);
+    }
+
+    public Class<ENTITY> getEntityType() {
+        return (Class<ENTITY>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 }
