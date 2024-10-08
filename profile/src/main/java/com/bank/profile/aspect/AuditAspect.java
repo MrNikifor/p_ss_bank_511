@@ -3,6 +3,7 @@ package com.bank.profile.aspect;
 import com.bank.profile.entity.Audit;
 import com.bank.profile.repository.AuditRepository;
 import com.bank.profile.service.generics.AbstractBaseCrudService;
+import io.micrometer.core.instrument.Clock;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -11,7 +12,11 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
+import javax.validation.ClockProvider;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 
 @Component
 @Aspect
@@ -20,49 +25,44 @@ public class AuditAspect {
 
     private final AuditRepository auditRepository;
 
-    @AfterReturning(pointcut = "com.bank.profile.aspect.pointcuts.AuditPointcuts.createOrUpdateMethods()", returning = "result")
-    public void beforeCreateOrUpdateAdvice(JoinPoint joinPoint, Object result) {
+
+    @AfterReturning(pointcut = "com.bank.profile.aspect.pointcuts.AuditPointcuts.createMethod()", returning = "result")
+    public void afterResultCreateOrUpdateAdvice(JoinPoint joinPoint, Object result) {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Object[] args = joinPoint.getArgs();
         Object service = joinPoint.getThis();
         Audit audit = new Audit();
 
-        AbstractBaseCrudService<?, ?, ?, ?> abstractBaseCrudService = (AbstractBaseCrudService<?, ?, ?, ?>) service;
-        Class<?> entityType = abstractBaseCrudService.getEntityType();
-
-        audit.setEntityType(entityType.getSimpleName());
+        audit.setEntityType(result.getClass().getSimpleName());
         audit.setOperationType(methodSignature.getName());
-        audit.setCreatedBy("Matvey"); //???
-        audit.setCreatedAt(LocalDate.now());
-        audit.setEntityJson(args[0].toString());
+        audit.setCreatedBy("Matvey");
+        audit.setCreatedAt(LocalDateTime.of(LocalDate.now(), LocalTime.now()));
+        audit.setEntityJson(result.toString());
         audit.setNewEntityJson(result.toString());
 
+
         if (methodSignature.getName().equals("update")) {
-            audit.setModifiedBy("Matvey"); //???
-            audit.setModifiedAt(LocalDate.now());
+            audit.setModifiedBy("Matvey");
+            audit.setModifiedAt(LocalDateTime.of(LocalDate.now(), LocalTime.now()));
+            audit.setNewEntityJson(result.toString());
         }
-        auditRepository.save(audit);
+        //auditRepository.save(audit);
     }
 
-    @Before("com.bank.profile.aspect.pointcuts.AuditPointcuts.deleteMethod()")
-    public void beforeDeleteAdvice(JoinPoint joinPoint) {
-        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
-        Object[] args = joinPoint.getArgs();
-        Object service = joinPoint.getThis();
-        Audit audit = new Audit();
+    @AfterReturning(pointcut = "com.bank.profile.aspect.pointcuts.AuditPointcuts.deleteMethod()", returning = "result")
+    public void afterResultDeleteAdvice(JoinPoint joinPoint, Object result) {
+//        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+//        Object[] args = joinPoint.getArgs();
+//        Object service = joinPoint.getThis();
+//        Audit audit = new Audit();
+//
+//        audit.setEntityType(result.getClass().getSimpleName());
+//        audit.setOperationType(methodSignature.getName());
+//        audit.setCreatedBy("Matvey");
+//        audit.setCreatedAt(LocalDateTime.of(LocalDate.now(), LocalTime.now()));
+//        audit.setEntityJson(result.toString());
 
-        AbstractBaseCrudService<?, ?, ?, ?> abstractBaseCrudService = (AbstractBaseCrudService<?, ?, ?, ?>) service;
-        Class<?> entityType = abstractBaseCrudService.getEntityType();
-        audit.setEntityType(entityType.getSimpleName());
-
-        Object entity = abstractBaseCrudService.read((Long) args[0]);
-        audit.setEntityJson(entity.toString());
-
-        audit.setOperationType(methodSignature.getName());
-        audit.setCreatedBy("Matvey"); //?????
-        audit.setCreatedAt(LocalDate.now());
-
-        auditRepository.save(audit);
+        //auditRepository.save(audit);
     }
 
 

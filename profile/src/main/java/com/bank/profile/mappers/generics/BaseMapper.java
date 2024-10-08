@@ -6,6 +6,7 @@ import java.util.List;
 
 @Component
 public interface BaseMapper<ENTITY, DTO> {
+
     DTO toDto(ENTITY entity);
 
     ENTITY toEntity(DTO dto);

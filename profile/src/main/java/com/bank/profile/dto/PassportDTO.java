@@ -1,13 +1,17 @@
 package com.bank.profile.dto;
 
+import com.bank.profile.dto.abstracts.AbstractDTO;
 import com.bank.profile.entity.Passport;
 import com.bank.profile.entity.Registration;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
 
 @Data
-public class PassportDTO {
+@EqualsAndHashCode(callSuper = true)
+public class PassportDTO extends AbstractDTO {
+    private Long id;
     private Integer series;
     private Integer number;
     private String lastName;

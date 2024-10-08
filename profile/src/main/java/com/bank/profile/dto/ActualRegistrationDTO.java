@@ -1,9 +1,13 @@
 package com.bank.profile.dto;
 
+import com.bank.profile.dto.abstracts.AbstractDTO;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class ActualRegistrationDTO {
+@EqualsAndHashCode(callSuper = true)
+public class ActualRegistrationDTO extends AbstractDTO {
+    private Long id;
     private String country;
     private String region;
     private String city;

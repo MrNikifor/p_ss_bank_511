@@ -13,7 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "audit", schema = "profile")
@@ -44,10 +44,10 @@ public class Audit extends AbstractEntity {
     private String modifiedBy;
 
     @Column(name = "created_at")
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "modified_at", nullable = true)
-    private LocalDate modifiedAt;
+    private LocalDateTime modifiedAt;
 
     @Column(name = "new_entity_json", nullable = true)
     private String newEntityJson;

@@ -6,8 +6,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuditPointcuts {
 
-    @Pointcut("execution(* create(*)) || execution(* update(*))")
-    public void createOrUpdateMethods(){}
+    @Pointcut("execution(* create(*))")
+    public void createMethod(){}
+
+    @Pointcut("execution(* update(*))")
+    public void updateMethod(){}
 
     @Pointcut("execution(* delete(*))")
     public void deleteMethod(){}
