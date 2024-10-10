@@ -14,7 +14,7 @@ public class AccountDetailsIdService extends AbstractBaseCrudService<
         AccountDetailsIdRepository,
         AccountDetailsIdMapper> {
 
-    public AccountDetailsIdService(AccountDetailsIdRepository repository, AccountDetailsIdMapper mapper) {
-        super(repository, mapper);
+    public AccountDetailsIdService(AccountDetailsIdRepository repository, AccountDetailsIdMapper mapper, AccountDetailsIdDTO accountDetailsIdDTO) {
+        super(repository, mapper, accountDetailsIdDTO);
     }
 }

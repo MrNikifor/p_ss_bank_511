@@ -5,10 +5,12 @@ import com.bank.profile.entity.Passport;
 import com.bank.profile.entity.Registration;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
 @Data
+@Component
 @EqualsAndHashCode(callSuper = true)
 public class PassportDTO extends AbstractDTO {
     private Long id;

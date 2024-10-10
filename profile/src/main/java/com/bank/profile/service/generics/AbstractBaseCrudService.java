@@ -4,13 +4,13 @@ import com.bank.profile.entity.abstracts.AbstractEntity;
 import com.bank.profile.mappers.generics.BaseMapper;
 import com.bank.profile.repository.generics.BaseRepository;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @AllArgsConstructor
-@Data
+@Slf4j
 public abstract class AbstractBaseCrudService<
         ENTITY extends AbstractEntity,
         DTO,
@@ -19,32 +19,38 @@ public abstract class AbstractBaseCrudService<
 
     protected final REPOSITORY repository;
     protected final MAPPER mapper;
-
-    @Override
-    public DTO read(Long id) {
-        return mapper.toDto(repository.findById(id).orElseThrow());
-    }
+    protected final DTO dto;
 
     @Override
     public List<DTO> readAll() {
+        log.info("Service: Логирование чтения всех записей типа {}", dto.getClass().getSimpleName());
         return mapper.toDtoList(repository.findAll());
+    }
+
+    @Override
+    public DTO read(Long id) {
+        log.info("Service: Логирование чтения записи типа {} по id: {}", dto.getClass().getSimpleName(), id);
+        return mapper.toDto(repository.findById(id).orElseThrow());
     }
 
     @Override
     @Transactional
     public DTO create(DTO dto) {
+        log.info("Service: Логирование создания записи {}", dto.getClass().getSimpleName());
         return mapper.toDto(repository.save(mapper.toEntity(dto)));
     }
 
     @Override
     @Transactional
     public DTO update(DTO dto) {
+        log.info("Service: Логирование изменения записи {}", dto.getClass().getSimpleName());
         return mapper.toDto(repository.save(mapper.toEntity(dto)));
     }
 
     @Override
     @Transactional
     public void delete(Long id) {
+        log.info("Service: Логирование удаления записи типа {} по id: {}", dto.getClass().getSimpleName(), id);
         repository.deleteById(id);
     }
 }

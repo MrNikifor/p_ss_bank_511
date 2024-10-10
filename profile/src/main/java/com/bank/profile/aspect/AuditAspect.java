@@ -5,6 +5,7 @@ import com.bank.profile.repository.AuditRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -20,6 +21,7 @@ import java.util.Optional;
 @Component
 @Aspect
 @RequiredArgsConstructor
+@Slf4j
 public class AuditAspect {
 
     private final AuditRepository auditRepository;
@@ -38,7 +40,9 @@ public class AuditAspect {
             audit.setCreatedAt(LocalDateTime.of(LocalDate.now(), LocalTime.now()));
             audit.setEntityJson(entityJson);
             auditRepository.save(audit);
+            log.info("Произвелось аудирование создания записи: {}\nВ таблицу был записан аудит: {}", result, audit);
         } catch (JsonProcessingException e) {
+            log.error("При аудировании создания записи {} произошла ошибка", result);
             throw new RuntimeException(e);
         }
     }
@@ -46,11 +50,11 @@ public class AuditAspect {
     @AfterReturning(pointcut = "com.bank.profile.aspect.pointcuts.AuditPointcuts.updateMethod()", returning = "result")
     public void afterResultUpdateAdvice(JoinPoint joinPoint, Object result) {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+        Audit audit = new Audit();
         try {
             String json = objectMapper.writeValueAsString(result);
             Optional<Audit> oldAudit = auditRepository.findFirstByEntityJsonStartingWithOrderByModifiedAt("{\"id\":" + objectMapper.readTree(json).get("id") + ",");
             if (oldAudit.isPresent()) {
-                Audit audit = new Audit();
                 Audit oldAuditO = oldAudit.get();
                 audit.setEntityType(result.getClass().getSimpleName());
                 audit.setOperationType(methodSignature.getName());
@@ -61,8 +65,10 @@ public class AuditAspect {
                 audit.setNewEntityJson(json);
                 audit.setEntityJson(oldAuditO.getEntityJson());
                 auditRepository.save(audit);
+                log.info("Произвелось аудирование изменения записи: {}\nВ таблицу был записан аудит: {}", result, audit);
             }
         } catch (JsonProcessingException e) {
+            log.error("При аудировании изменения записи {} произошла ошибка", result);
             throw new RuntimeException(e);
         }
     }

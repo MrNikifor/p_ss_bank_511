@@ -3,10 +3,12 @@ package com.bank.profile.dto;
 import com.bank.profile.dto.abstracts.AbstractDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
 @Data
+@Component
 @EqualsAndHashCode(callSuper = true)
 public class AuditDTO extends AbstractDTO {
     private Long id;

@@ -12,10 +12,9 @@ public class ActualRegistrationService extends AbstractBaseCrudService<
         ActualRegistration,
         ActualRegistrationDTO,
         ActualRegistrationRepository,
-        ActualRegistrationMapper
-        > {
+        ActualRegistrationMapper> {
 
-    public ActualRegistrationService(ActualRegistrationRepository repository, ActualRegistrationMapper mapper) {
-        super(repository, mapper);
+    public ActualRegistrationService(ActualRegistrationRepository repository, ActualRegistrationMapper mapper, ActualRegistrationDTO actualRegistrationDTO) {
+        super(repository, mapper, actualRegistrationDTO);
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProfileService extends AbstractBaseCrudService<Profile, ProfileDTO, ProfileRepository, ProfileMapper> {
 
-    public ProfileService(ProfileRepository repository, ProfileMapper mapper) {
-        super(repository, mapper);
+    public ProfileService(ProfileRepository repository, ProfileMapper mapper, ProfileDTO profileDTO) {
+        super(repository, mapper, profileDTO);
     }
 }

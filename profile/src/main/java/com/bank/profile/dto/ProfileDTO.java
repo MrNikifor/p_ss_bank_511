@@ -5,8 +5,10 @@ import com.bank.profile.entity.ActualRegistration;
 import com.bank.profile.entity.Passport;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.stereotype.Component;
 
 @Data
+@Component
 @EqualsAndHashCode(callSuper = true)
 public class ProfileDTO extends AbstractDTO {
     private Long id;

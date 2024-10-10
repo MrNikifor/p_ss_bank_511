@@ -9,7 +9,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class RegistrationService extends AbstractBaseCrudService<Registration, RegistrationDTO, RegistrationRepository, RegistrationMapper> {
-    public RegistrationService(RegistrationRepository repository, RegistrationMapper mapper) {
-        super(repository, mapper);
+
+    public RegistrationService(RegistrationRepository repository, RegistrationMapper mapper, RegistrationDTO registrationDTO) {
+        super(repository, mapper, registrationDTO);
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class PassportService extends AbstractBaseCrudService<Passport, PassportDTO, PassportRepository, PassportMapper> {
 
-    public PassportService(PassportRepository repository, PassportMapper mapper) {
-        super(repository, mapper);
+    public PassportService(PassportRepository repository, PassportMapper mapper, PassportDTO passportDTO) {
+        super(repository, mapper, passportDTO);
     }
 }
