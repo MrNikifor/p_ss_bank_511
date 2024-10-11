@@ -9,11 +9,7 @@ import com.bank.profile.validators.EntityValidator;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AccountDetailsIdService extends AbstractBaseCrudService<
-        AccountDetailsId,
-        AccountDetailsIdDTO,
-        AccountDetailsIdRepository,
-        AccountDetailsIdMapper> {
+public class AccountDetailsIdService extends AbstractBaseCrudService<AccountDetailsId, AccountDetailsIdDTO, AccountDetailsIdRepository, AccountDetailsIdMapper> {
 
     public AccountDetailsIdService(AccountDetailsIdRepository repository, AccountDetailsIdMapper mapper, AccountDetailsIdDTO accountDetailsIdDTO, EntityValidator<AccountDetailsId> entityValidator) {
         super(repository, mapper, accountDetailsIdDTO, entityValidator);

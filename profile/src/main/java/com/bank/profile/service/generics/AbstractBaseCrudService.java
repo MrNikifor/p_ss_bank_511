@@ -12,11 +12,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @Slf4j
-public abstract class AbstractBaseCrudService<
-        ENTITY extends AbstractEntity,
-        DTO,
-        REPOSITORY extends BaseRepository<ENTITY>,
-        MAPPER extends BaseMapper<ENTITY, DTO>> implements BaseCrudService<DTO> {
+public abstract class AbstractBaseCrudService<ENTITY extends AbstractEntity, DTO, REPOSITORY extends BaseRepository<ENTITY>, MAPPER extends BaseMapper<ENTITY, DTO>> implements BaseCrudService<DTO> {
 
     protected final REPOSITORY repository;
     protected final MAPPER mapper;

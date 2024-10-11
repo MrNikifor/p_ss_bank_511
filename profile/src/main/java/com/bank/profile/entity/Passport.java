@@ -75,8 +75,7 @@ public class Passport extends AbstractEntity {
     @AllArgsConstructor
     @Getter
     public enum Gender {
-        ЖЕН("ЖЕН"),
-        МУЖ("МУЖ");
+        ЖЕН("ЖЕН"), МУЖ("МУЖ");
 
         private final String value;
     }

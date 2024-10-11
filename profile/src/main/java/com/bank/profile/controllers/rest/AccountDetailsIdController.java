@@ -10,11 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/accountdetailsid")
-public class AccountDetailsIdController extends AbstractController<
-        AccountDetailsId,
-        AccountDetailsIdDTO,
-        AccountDetailsIdService,
-        AccountDetailsIdMapper> {
+public class AccountDetailsIdController extends AbstractController<AccountDetailsId, AccountDetailsIdDTO, AccountDetailsIdService, AccountDetailsIdMapper> {
 
     public AccountDetailsIdController(AccountDetailsIdService service, AccountDetailsIdMapper mapper) {
         super(service, mapper);

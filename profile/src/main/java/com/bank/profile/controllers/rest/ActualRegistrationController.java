@@ -10,11 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/actualregistration")
-public class ActualRegistrationController extends AbstractController<
-        ActualRegistration,
-        ActualRegistrationDTO,
-        ActualRegistrationService,
-        ActualRegistrationMapper> {
+public class ActualRegistrationController extends AbstractController<ActualRegistration, ActualRegistrationDTO, ActualRegistrationService, ActualRegistrationMapper> {
 
     public ActualRegistrationController(ActualRegistrationService service, ActualRegistrationMapper mapper) {
         super(service, mapper);

@@ -16,11 +16,7 @@ import javax.xml.bind.ValidationException;
 import java.util.List;
 
 @AllArgsConstructor
-public abstract class AbstractController<
-        ENTITY extends AbstractEntity,
-        DTO,
-        SERVICE extends BaseCrudService<DTO>,
-        MAPPER extends BaseMapper<ENTITY, DTO>> implements BaseController<ENTITY,DTO> {
+public abstract class AbstractController<ENTITY extends AbstractEntity, DTO, SERVICE extends BaseCrudService<DTO>, MAPPER extends BaseMapper<ENTITY, DTO>> implements BaseController<ENTITY, DTO> {
 
     protected final SERVICE service;
     protected final MAPPER mapper;

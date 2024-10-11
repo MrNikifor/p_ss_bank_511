@@ -20,9 +20,7 @@ public class EntityValidator<ENTITY extends AbstractEntity> {
     public void validate(ENTITY entity) throws ValidationException {
         Set<ConstraintViolation<ENTITY>> constraintViolations = validator.validate(entity);
         if (!constraintViolations.isEmpty()) {
-            String resultViolation = constraintViolations.stream()
-                    .map(ConstraintViolation::getMessage)
-                    .reduce((s1, s2) -> s1 + ". " + s2).orElse("");
+            String resultViolation = constraintViolations.stream().map(ConstraintViolation::getMessage).reduce((s1, s2) -> s1 + ". " + s2).orElse("");
             log.error("Данные не валидны, ошибки валидации: {}", resultViolation);
             throw new ValidationException(resultViolation);
         }

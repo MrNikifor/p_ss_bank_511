@@ -9,11 +9,7 @@ import com.bank.profile.validators.EntityValidator;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ActualRegistrationService extends AbstractBaseCrudService<
-        ActualRegistration,
-        ActualRegistrationDTO,
-        ActualRegistrationRepository,
-        ActualRegistrationMapper> {
+public class ActualRegistrationService extends AbstractBaseCrudService<ActualRegistration, ActualRegistrationDTO, ActualRegistrationRepository, ActualRegistrationMapper> {
 
     public ActualRegistrationService(ActualRegistrationRepository repository, ActualRegistrationMapper mapper, ActualRegistrationDTO actualRegistrationDTO, EntityValidator<ActualRegistration> entityValidator) {
         super(repository, mapper, actualRegistrationDTO, entityValidator);
