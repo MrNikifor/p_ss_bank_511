@@ -3,6 +3,7 @@ package com.bank.profile.service.generics;
 import com.bank.profile.entity.abstracts.AbstractEntity;
 import com.bank.profile.mappers.generics.BaseMapper;
 import com.bank.profile.repository.generics.BaseRepository;
+import com.bank.profile.validators.EntityValidator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,8 @@ public abstract class AbstractBaseCrudService<
     protected final MAPPER mapper;
     protected final DTO dto;
 
+    private final EntityValidator<ENTITY> entityValidator;
+
     @Override
     public List<DTO> readAll() {
         log.info("Service: Логирование чтения всех записей типа {}", dto.getClass().getSimpleName());
@@ -35,22 +38,26 @@ public abstract class AbstractBaseCrudService<
 
     @Override
     @Transactional
+    public void delete(Long id) {
+        log.info("Service: Логирование удаления записи типа {} по id: {}", dto.getClass().getSimpleName(), id);
+        repository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
     public DTO create(DTO dto) {
         log.info("Service: Логирование создания записи {}", dto.getClass().getSimpleName());
-        return mapper.toDto(repository.save(mapper.toEntity(dto)));
+        ENTITY entity = mapper.toEntity(dto);
+        entityValidator.validate(entity);
+        return mapper.toDto(repository.save(entity));
     }
 
     @Override
     @Transactional
     public DTO update(DTO dto) {
         log.info("Service: Логирование изменения записи {}", dto.getClass().getSimpleName());
-        return mapper.toDto(repository.save(mapper.toEntity(dto)));
-    }
-
-    @Override
-    @Transactional
-    public void delete(Long id) {
-        log.info("Service: Логирование удаления записи типа {} по id: {}", dto.getClass().getSimpleName(), id);
-        repository.deleteById(id);
+        ENTITY entity = mapper.toEntity(dto);
+        entityValidator.validate(entity);
+        return mapper.toDto(repository.save(entity));
     }
 }

@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/passport")
 public class PassportController extends AbstractController<Passport, PassportDTO, PassportService, PassportMapper> {
-    public PassportController(PassportService service, PassportMapper mapper, PassportDTO passportDTO) {
-        super(service, mapper, passportDTO);
+
+    public PassportController(PassportService service, PassportMapper mapper) {
+        super(service, mapper);
     }
 }

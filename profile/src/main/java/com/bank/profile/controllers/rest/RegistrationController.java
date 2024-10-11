@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/registration")
 public class RegistrationController extends AbstractController<Registration, RegistrationDTO, RegistrationService, RegistrationMapper> {
 
-    public RegistrationController(RegistrationService service, RegistrationMapper mapper, RegistrationDTO registrationDTO) {
-        super(service, mapper, registrationDTO);
+    public RegistrationController(RegistrationService service, RegistrationMapper mapper) {
+        super(service, mapper);
     }
 }

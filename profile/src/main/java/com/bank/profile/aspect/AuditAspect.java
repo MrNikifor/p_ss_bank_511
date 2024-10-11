@@ -40,7 +40,6 @@ public class AuditAspect {
             audit.setCreatedAt(LocalDateTime.of(LocalDate.now(), LocalTime.now()));
             audit.setEntityJson(entityJson);
             auditRepository.save(audit);
-            log.info("Произвелось аудирование создания записи: {}\nВ таблицу был записан аудит: {}", result, audit);
         } catch (JsonProcessingException e) {
             log.error("При аудировании создания записи {} произошла ошибка", result);
             throw new RuntimeException(e);
@@ -65,7 +64,6 @@ public class AuditAspect {
                 audit.setNewEntityJson(json);
                 audit.setEntityJson(oldAuditO.getEntityJson());
                 auditRepository.save(audit);
-                log.info("Произвелось аудирование изменения записи: {}\nВ таблицу был записан аудит: {}", result, audit);
             }
         } catch (JsonProcessingException e) {
             log.error("При аудировании изменения записи {} произошла ошибка", result);

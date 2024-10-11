@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/profile")
 public class ProfileController extends AbstractController<Profile, ProfileDTO, ProfileService, ProfileMapper> {
 
-    public ProfileController(ProfileService service, ProfileMapper mapper, ProfileDTO profileDTO) {
-        super(service, mapper, profileDTO);
+    public ProfileController(ProfileService service, ProfileMapper mapper) {
+        super(service, mapper);
     }
 }
