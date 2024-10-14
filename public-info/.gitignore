@@ -1,0 +1,55 @@
+# Директории сборки
+target/
+bin/
+build/
+
+# Скомпилированные файлы
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+
+# Логи
+*.log
+
+# Файлы IDE
+.idea/
+*.iml
+.settings/
+.classpath
+.project
+
+# Временные файлы
+*.tmp
+*.bak
+*.swp
+
+# Файлы NetBeans
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+
+# Файлы BlueJ
+*.ctxt
+
+# Виртуальные машины (crash logs)
+hs_err_pid*
+replay_pid*
+
+# Maven специфичные файлы
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+pom.xml.bak
+
+# Gradle специфичные файлы
+.gradle/
+gradle-app.setting
+!gradle-wrapper.jar
+
+# Общие временные файлы и настройки IDE
+out/
