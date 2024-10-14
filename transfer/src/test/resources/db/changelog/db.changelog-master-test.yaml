@@ -1,0 +1,111 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Kirill
+      changes:
+        - sql:
+            sql: CREATE SCHEMA IF NOT EXISTS transfer;
+
+  - changeSet:
+      id: 2
+      author: Kirill
+      changes:
+        - createTable:
+            schemaName: transfer
+            tableName: card_transfer
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: card_number
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: amount
+                  type: decimal(20, 2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: purpose
+                  type: text
+              - column:
+                  name: account_details_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 3
+      author: Kirill
+      changes:
+        - createTable:
+            schemaName: transfer
+            tableName: phone_transfer
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: phone_number
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount
+                  type: decimal(20, 2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: purpose
+                  type: text
+              - column:
+                  name: account_details_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 4
+      author: Kirill
+      changes:
+        - createTable:
+            schemaName: transfer
+            tableName: account_transfer
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: account_number
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: amount
+                  type: decimal(20, 2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: purpose
+                  type: text
+              - column:
+                  name: account_details_id
+                  type: bigint
+                  constraints:
+                    nullable: false
