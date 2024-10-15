@@ -27,16 +27,19 @@ public class CertificateServiceImpl implements CertificateService {
     @Override
     @Transactional
     public CertificateDTO createCertificate(CertificateDTO certificateDTO) {
+
         log.info("Creating new certificate: {}", certificateDTO);
 
         if (certificateDTO == null) {
+
             log.error("Failed to create certificate: CertificateDTO is null");
             throw new IllegalArgumentException("CertificateDTO must not be null");
         }
 
-        // Get bank details by ID for the relationship
+
         Long bankDetailsId = certificateDTO.getBankDetailsId();
         if (bankDetailsId == null) {
+
             log.error("Failed to create certificate: BankDetails ID is null");
             throw new IllegalArgumentException("BankDetails ID must not be null");
         }
@@ -44,14 +47,14 @@ public class CertificateServiceImpl implements CertificateService {
         BankDetails bankDetails = bankDetailsRepository.findById(bankDetailsId)
                 .orElseThrow(() -> {
                     log.error("Bank details not found for ID: {}", bankDetailsId);
+
                     return new ResourceNotFoundException("Bank details not found");
                 });
 
         Certificate certificate = autoCertificateMapper.mapToCertificate(certificateDTO);
-        // Set the relationship with bank details
         certificate.setBankDetails(bankDetails);
-
         Certificate savedCertificate = certificateRepository.save(certificate);
+
         log.info("Certificate successfully created: {}", savedCertificate);
 
         return autoCertificateMapper.mapToCertificateDTO(savedCertificate);
@@ -60,6 +63,7 @@ public class CertificateServiceImpl implements CertificateService {
     @Override
     @Transactional(readOnly = true)
     public CertificateDTO getCertificateById(Long id) {
+
         log.info("Fetching certificate by ID: {}", id);
 
         if (id == null) {
@@ -74,15 +78,18 @@ public class CertificateServiceImpl implements CertificateService {
                 });
 
         log.info("Certificate found: {}", certificate);
+
         return autoCertificateMapper.mapToCertificateDTO(certificate);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<CertificateDTO> getAllCertificates() {
+
         log.info("Fetching all certificates");
 
         List<Certificate> certificates = certificateRepository.findAll();
+
         log.info("Total certificates fetched: {}", certificates.size());
 
         return certificates.stream()
@@ -93,6 +100,7 @@ public class CertificateServiceImpl implements CertificateService {
     @Override
     @Transactional
     public CertificateDTO updateCertificate(CertificateDTO certificateDTO) {
+
         log.info("Updating certificate: {}", certificateDTO);
 
         if (certificateDTO == null) {
@@ -101,6 +109,7 @@ public class CertificateServiceImpl implements CertificateService {
         }
 
         Long id = certificateDTO.getId();
+
         if (id == null) {
             log.error("ID must not be null");
             throw new IllegalArgumentException("ID must not be null");
@@ -109,6 +118,7 @@ public class CertificateServiceImpl implements CertificateService {
         Certificate existingCertificate = certificateRepository.findById(id)
                 .orElseThrow(() -> {
                     log.error("Certificate not found for ID: {}", id);
+
                     return new ResourceNotFoundException("Certificate not found");
                 });
 
@@ -117,6 +127,7 @@ public class CertificateServiceImpl implements CertificateService {
         Certificate updatedCertificate = certificateRepository.save(existingCertificate);
 
         log.info("Certificate successfully updated: {}", updatedCertificate);
+
         return autoCertificateMapper.mapToCertificateDTO(updatedCertificate);
     }
 

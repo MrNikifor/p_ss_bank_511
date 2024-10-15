@@ -24,6 +24,7 @@ public class BankDetailsServiceImpl implements BankDetailsService {
     @Override
     @Transactional
     public BankDetailsDTO createBankDetails(BankDetailsDTO bankDetailsDTO) {
+
         log.info("Creating new bank details: {}", bankDetailsDTO);
 
         if (bankDetailsDTO == null) {
@@ -35,12 +36,14 @@ public class BankDetailsServiceImpl implements BankDetailsService {
         BankDetails savedBankDetails = bankDetailsRepository.save(bankDetails);
 
         log.info("Bank details successfully created: {}", savedBankDetails);
+
         return autoBankDetailsMapper.mapToBankDetailsDTO(savedBankDetails);
     }
 
     @Override
     @Transactional(readOnly = true)
     public BankDetailsDTO getBankDetailsById(Long id) {
+
         log.info("Fetching bank details by ID: {}", id);
 
         if (id == null) {
@@ -55,15 +58,18 @@ public class BankDetailsServiceImpl implements BankDetailsService {
                 });
 
         log.info("Bank details found: {}", bankDetails);
+
         return autoBankDetailsMapper.mapToBankDetailsDTO(bankDetails);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<BankDetailsDTO> getAllBankDetails() {
+
         log.info("Fetching all bank details");
 
         List<BankDetails> bankDetailsList = bankDetailsRepository.findAll();
+
         log.info("Total bank details fetched: {}", bankDetailsList.size());
 
         return bankDetailsList.stream()
@@ -74,6 +80,7 @@ public class BankDetailsServiceImpl implements BankDetailsService {
     @Override
     @Transactional
     public BankDetailsDTO updateBankDetails(BankDetailsDTO bankDetailsDTO) {
+
         log.info("Updating bank details: {}", bankDetailsDTO);
 
         if (bankDetailsDTO == null) {
@@ -90,6 +97,7 @@ public class BankDetailsServiceImpl implements BankDetailsService {
         BankDetails existingBankDetail = bankDetailsRepository.findById(id)
                 .orElseThrow(() -> {
                     log.error("Bank details not found for ID: {}", id);
+
                     return new ResourceNotFoundException("Bank details not found");
                 });
 
@@ -104,6 +112,7 @@ public class BankDetailsServiceImpl implements BankDetailsService {
         BankDetails updatedBankDetail = bankDetailsRepository.save(existingBankDetail);
 
         log.info("Bank details successfully updated: {}", updatedBankDetail);
+
         return autoBankDetailsMapper.mapToBankDetailsDTO(updatedBankDetail);
     }
 
@@ -123,6 +132,7 @@ public class BankDetailsServiceImpl implements BankDetailsService {
         }
 
         bankDetailsRepository.deleteById(id);
+
         log.info("Bank details with ID {} successfully deleted", id);
     }
 }

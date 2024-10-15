@@ -38,9 +38,13 @@ public class BranchController {
     @ApiResponse(responseCode = "201", description = "Отделение банка успешно создано")
     @PostMapping
     public ResponseEntity<BranchDTO> createBranch(@Valid @RequestBody BranchDTO branchDTO) {
+
         log.info("Creating branch with data: {}", branchDTO);
+
         BranchDTO createdBranch = branchService.createBranch(branchDTO);
+
         log.info("Branch created successfully with ID: {}", createdBranch.getId());
+
         return new ResponseEntity<>(createdBranch, HttpStatus.CREATED);
     }
 
@@ -49,9 +53,13 @@ public class BranchController {
     @ApiResponse(responseCode = "404", description = "Отделение банка не найдено")
     @GetMapping("/{id}")
     public ResponseEntity<BranchDTO> getBranchById(@PathVariable Long id) {
+
         log.info("Fetching branch with ID: {}", id);
+
         BranchDTO branch = branchService.getBranchById(id);
+
         log.info("Branch retrieved successfully: {}", branch);
+
         return new ResponseEntity<>(branch, HttpStatus.OK);
     }
 
@@ -59,9 +67,13 @@ public class BranchController {
     @ApiResponse(responseCode = "200", description = "Список отделений банка успешно получен")
     @GetMapping
     public ResponseEntity<List<BranchDTO>> getAllBranches() {
+
         log.info("Fetching all branches");
+
         List<BranchDTO> branches = branchService.getAllBranches();
+
         log.info("Total branches retrieved: {}", branches.size());
+
         return new ResponseEntity<>(branches, HttpStatus.OK);
     }
 
@@ -74,7 +86,9 @@ public class BranchController {
         log.info("Updating branch with ID: {}", id);
         branchDTO.setId(id);
         BranchDTO updatedBranch = branchService.updateBranch(branchDTO);
+
         log.info("Branch updated successfully with ID: {}", updatedBranch.getId());
+
         return new ResponseEntity<>(updatedBranch, HttpStatus.OK);
     }
 
@@ -83,9 +97,13 @@ public class BranchController {
     @ApiResponse(responseCode = "404", description = "Отделение банка не найдено")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBranch(@PathVariable Long id) {
+
         log.info("Deleting branch with ID: {}", id);
+
         branchService.deleteBranch(id);
+
         log.info("Branch deleted successfully with ID: {}", id);
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

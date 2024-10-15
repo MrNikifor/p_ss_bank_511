@@ -24,6 +24,7 @@ public class BranchServiceImpl implements BranchService {
     @Override
     @Transactional
     public BranchDTO createBranch(BranchDTO branchDTO) {
+
         log.info("Creating new branch: {}", branchDTO);
 
         if (branchDTO == null) {
@@ -35,6 +36,7 @@ public class BranchServiceImpl implements BranchService {
         Branch savedBranch = branchRepository.save(branch);
 
         log.info("Branch successfully created: {}", savedBranch);
+
         return autoBranchMapper.mapToBranchDTO(savedBranch);
     }
 
@@ -55,15 +57,18 @@ public class BranchServiceImpl implements BranchService {
                 });
 
         log.info("Branch found: {}", branch);
+
         return autoBranchMapper.mapToBranchDTO(branch);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<BranchDTO> getAllBranches() {
+
         log.info("Fetching all branches");
 
         List<Branch> branches = branchRepository.findAll();
+
         log.info("Total branches fetched: {}", branches.size());
 
         return branches.stream()
@@ -74,6 +79,7 @@ public class BranchServiceImpl implements BranchService {
     @Override
     @Transactional
     public BranchDTO updateBranch(BranchDTO branchDTO) {
+
         log.info("Updating branch: {}", branchDTO);
 
         if (branchDTO == null) {
@@ -90,6 +96,7 @@ public class BranchServiceImpl implements BranchService {
         Branch existingBranch = branchRepository.findById(id)
                 .orElseThrow(() -> {
                     log.error("Branch not found for ID: {}", id);
+
                     return new ResourceNotFoundException("Branch not found");
                 });
 
@@ -102,6 +109,7 @@ public class BranchServiceImpl implements BranchService {
         Branch updatedBranch = branchRepository.save(existingBranch);
 
         log.info("Branch successfully updated: {}", updatedBranch);
+
         return autoBranchMapper.mapToBranchDTO(updatedBranch);
     }
 

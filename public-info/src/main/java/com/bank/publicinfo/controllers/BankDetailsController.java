@@ -38,6 +38,7 @@ public class BankDetailsController {
     @ApiResponse(responseCode = "201", description = "Реквизиты банка успешно созданы")
     @PostMapping
     public ResponseEntity<BankDetailsDTO> createBankDetails(@Valid @RequestBody BankDetailsDTO bankDetailsDTO) {
+
         log.info("Creating bank details with data: {}", bankDetailsDTO);
 
         if (bankDetailsDTO.getJointStockCompany() == null) {
@@ -46,7 +47,9 @@ public class BankDetailsController {
         }
 
         BankDetailsDTO createdBankDetails = bankDetailsService.createBankDetails(bankDetailsDTO);
+
         log.info("Bank details created successfully with ID: {}", createdBankDetails.getId());
+
         return new ResponseEntity<>(createdBankDetails, HttpStatus.CREATED);
     }
 
@@ -55,9 +58,13 @@ public class BankDetailsController {
     @ApiResponse(responseCode = "404", description = "Реквизиты банка не найдены")
     @GetMapping("/{id}")
     public ResponseEntity<BankDetailsDTO> getBankDetailsById(@PathVariable Long id) {
+
         log.info("Fetching bank details with ID: {}", id);
+
         BankDetailsDTO bankDetails = bankDetailsService.getBankDetailsById(id);
+
         log.info("Bank details retrieved successfully: {}", bankDetails);
+
         return new ResponseEntity<>(bankDetails, HttpStatus.OK);
     }
 
@@ -65,9 +72,13 @@ public class BankDetailsController {
     @ApiResponse(responseCode = "200", description = "Список реквизитов банков успешно получен")
     @GetMapping
     public ResponseEntity<List<BankDetailsDTO>> getAllBankDetails() {
+
         log.info("Fetching all bank details");
+
         List<BankDetailsDTO> bankDetailsList = bankDetailsService.getAllBankDetails();
+
         log.info("Total bank details retrieved: {}", bankDetailsList.size());
+
         return new ResponseEntity<>(bankDetailsList, HttpStatus.OK);
     }
 
@@ -78,9 +89,12 @@ public class BankDetailsController {
     public ResponseEntity<BankDetailsDTO> updateBankDetails(@PathVariable Long id,
                                                             @Valid @RequestBody BankDetailsDTO bankDetailsDTO) {
         log.info("Updating bank details with ID: {}", id);
+
         bankDetailsDTO.setId(id);
         BankDetailsDTO updatedBankDetails = bankDetailsService.updateBankDetails(bankDetailsDTO);
+
         log.info("Bank details updated successfully with ID: {}", updatedBankDetails.getId());
+
         return new ResponseEntity<>(updatedBankDetails, HttpStatus.OK);
     }
 
@@ -89,9 +103,13 @@ public class BankDetailsController {
     @ApiResponse(responseCode = "404", description = "Реквизиты банка не найдены")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBankDetail(@PathVariable Long id) {
+
         log.info("Deleting bank details with ID: {}", id);
+
         bankDetailsService.deleteBankDetails(id);
+
         log.info("Bank details deleted successfully with ID: {}", id);
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -25,6 +25,7 @@ public class ATMServiceImpl implements ATMService {
     @Override
     @Transactional
     public ATMDTO createATM(ATMDTO atmDTO) {
+
         log.info("Creating a new ATM: {}", atmDTO);
 
         if (atmDTO == null) {
@@ -36,12 +37,14 @@ public class ATMServiceImpl implements ATMService {
         ATM savedAtm = atmRepository.save(atm);
 
         log.info("ATM successfully created: {}", savedAtm);
+
         return autoATMMapper.mapToATMDTO(savedAtm);
     }
 
     @Override
     @Transactional(readOnly = true)
     public ATMDTO getATMById(Long id) {
+
         log.info("Fetching ATM by ID: {}", id);
 
         if (id == null) {
@@ -56,15 +59,18 @@ public class ATMServiceImpl implements ATMService {
                 });
 
         log.info("ATM found: {}", atm);
+
         return autoATMMapper.mapToATMDTO(atm);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<ATMDTO> getAllATMs() {
+
         log.info("Fetching all ATMs");
 
         List<ATM> atms = atmRepository.findAll();
+
         return atms.stream()
                 .map(autoATMMapper::mapToATMDTO)
                 .collect(Collectors.toList());
@@ -73,6 +79,7 @@ public class ATMServiceImpl implements ATMService {
     @Override
     @Transactional
     public ATMDTO updateATM(ATMDTO atmDTO) {
+
         log.info("Updating ATM: {}", atmDTO);
 
         if (atmDTO == null) {
@@ -81,6 +88,7 @@ public class ATMServiceImpl implements ATMService {
         }
 
         Long id = atmDTO.getId();
+
         if (id == null) {
             log.error("ID must not be null");
             throw new IllegalArgumentException("ID must not be null");
@@ -100,6 +108,7 @@ public class ATMServiceImpl implements ATMService {
         ATM updatedATM = atmRepository.save(existingATM);
 
         log.info("ATM successfully updated: {}", updatedATM);
+
         return autoATMMapper.mapToATMDTO(updatedATM);
     }
 

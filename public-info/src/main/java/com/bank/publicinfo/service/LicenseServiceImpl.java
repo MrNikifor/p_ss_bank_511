@@ -27,6 +27,7 @@ public class LicenseServiceImpl implements LicenseService {
     @Override
     @Transactional
     public LicenseDTO createLicense(LicenseDTO licenseDTO) {
+
         log.info("Creating new license: {}", licenseDTO);
 
         if (licenseDTO == null) {
@@ -43,13 +44,14 @@ public class LicenseServiceImpl implements LicenseService {
         BankDetails bankDetails = bankDetailsRepository.findById(bankDetailsId)
                 .orElseThrow(() -> {
                     log.error("Bank details not found for ID: {}", bankDetailsId);
+
                     return new ResourceNotFoundException("Bank details not found");
                 });
 
         License license = autoLicenseMapper.mapToLicense(licenseDTO);
         license.setBankDetails(bankDetails);
-
         License savedLicense = licenseRepository.save(license);
+
         log.info("License successfully created: {}", savedLicense);
 
         return autoLicenseMapper.mapToLicenseDTO(savedLicense);
@@ -72,6 +74,7 @@ public class LicenseServiceImpl implements LicenseService {
                 });
 
         log.info("License found: {}", license);
+
         return autoLicenseMapper.mapToLicenseDTO(license);
     }
 
@@ -91,6 +94,7 @@ public class LicenseServiceImpl implements LicenseService {
     @Override
     @Transactional
     public LicenseDTO updateLicense(LicenseDTO licenseDTO) {
+
         log.info("Updating license: {}", licenseDTO);
 
         if (licenseDTO == null) {
@@ -99,6 +103,7 @@ public class LicenseServiceImpl implements LicenseService {
         }
 
         Long id = licenseDTO.getId();
+
         if (id == null) {
             log.error("ID must not be null");
             throw new IllegalArgumentException("ID must not be null");
@@ -107,12 +112,14 @@ public class LicenseServiceImpl implements LicenseService {
         License existingLicense = licenseRepository.findById(id)
                 .orElseThrow(() -> {
                     log.error("License not found for ID: {}", id);
+
                     return new ResourceNotFoundException("License not found");
                 });
 
         existingLicense.setPhoto(licenseDTO.getPhoto());
 
         License updatedLicense = licenseRepository.save(existingLicense);
+
         log.info("License successfully updated: {}", updatedLicense);
 
         return autoLicenseMapper.mapToLicenseDTO(updatedLicense);

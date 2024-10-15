@@ -38,9 +38,13 @@ public class CertificateController {
     @ApiResponse(responseCode = "201", description = "Сертификат успешно создан")
     @PostMapping
     public ResponseEntity<CertificateDTO> createCertificate(@Valid @RequestBody CertificateDTO certificateDto) {
+
         log.info("Creating certificate with data: {}", certificateDto);
+
         CertificateDTO createdCertificate = certificateService.createCertificate(certificateDto);
+
         log.info("Certificate created successfully with ID: {}", createdCertificate.getId());
+
         return new ResponseEntity<>(createdCertificate, HttpStatus.CREATED);
     }
 
@@ -49,9 +53,13 @@ public class CertificateController {
     @ApiResponse(responseCode = "404", description = "Сертификат не найден")
     @GetMapping("/{id}")
     public ResponseEntity<CertificateDTO> getCertificateById(@PathVariable Long id) {
+
         log.info("Fetching certificate with ID: {}", id);
+
         CertificateDTO certificate = certificateService.getCertificateById(id);
+
         log.info("Certificate retrieved successfully: {}", certificate);
+
         return new ResponseEntity<>(certificate, HttpStatus.OK);
     }
 
@@ -59,9 +67,13 @@ public class CertificateController {
     @ApiResponse(responseCode = "200", description = "Список сертификатов успешно получен")
     @GetMapping
     public ResponseEntity<List<CertificateDTO>> getAllCertificates() {
+
         log.info("Fetching all certificates");
+
         List<CertificateDTO> certificates = certificateService.getAllCertificates();
+
         log.info("Total certificates retrieved: {}", certificates.size());
+
         return new ResponseEntity<>(certificates, HttpStatus.OK);
     }
 
@@ -72,9 +84,12 @@ public class CertificateController {
     public ResponseEntity<CertificateDTO> updateCertificate(@PathVariable Long id,
                                                             @Valid @RequestBody CertificateDTO certificateDto) {
         log.info("Updating certificate with ID: {}", id);
+
         certificateDto.setId(id);
         CertificateDTO updatedCertificate = certificateService.updateCertificate(certificateDto);
+
         log.info("Certificate updated successfully with ID: {}", updatedCertificate.getId());
+
         return new ResponseEntity<>(updatedCertificate, HttpStatus.OK);
     }
 
@@ -83,9 +98,13 @@ public class CertificateController {
     @ApiResponse(responseCode = "404", description = "Сертификат не найден")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCertificate(@PathVariable Long id) {
+
         log.info("Deleting certificate with ID: {}", id);
+
         certificateService.deleteCertificate(id);
+
         log.info("Certificate deleted successfully with ID: {}", id);
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

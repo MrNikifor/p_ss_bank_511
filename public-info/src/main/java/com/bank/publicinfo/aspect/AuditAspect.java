@@ -24,20 +24,22 @@ public class AuditAspect {
     private final AuditRepository auditRepository;
     private final ObjectMapper objectMapper;
 
-    private ThreadLocal<Audit> auditThreadLocal = new ThreadLocal<>();
 
     @AfterReturning(pointcut = "execution(* com.bank.publicinfo.service.*.create*(..))", returning = "result")
     public void afterResultCreateAdvice(JoinPoint joinPoint, Object result) {
+
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+
         Audit audit = new Audit();
         try {
             String entityJson = objectMapper.writeValueAsString(result);
             audit.setEntityType(result.getClass().getSimpleName());
             audit.setOperationType(methodSignature.getName());
-            audit.setCreatedBy("Tony Montana");
+            audit.setCreatedBy("Ivan Pereoridaroga");
             audit.setCreatedAt(LocalDateTime.now());
             audit.setEntityJson(entityJson);
             auditRepository.save(audit);
+
             log.info("Created audit record for entity: {}", result.getClass().getSimpleName());
         } catch (JsonProcessingException e) {
             log.error("Error auditing creation of record {}: {}", result, e.getMessage());
@@ -47,7 +49,9 @@ public class AuditAspect {
 
     @AfterReturning(pointcut = "execution(* com.bank.publicinfo.service.*.update*(..))", returning = "result")
     public void afterResultUpdateAdvice(JoinPoint joinPoint, Object result) {
+
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+
         Audit audit = new Audit();
         try {
             String json = objectMapper.writeValueAsString(result);
@@ -57,12 +61,13 @@ public class AuditAspect {
                 audit.setEntityType(result.getClass().getSimpleName());
                 audit.setOperationType(methodSignature.getName());
                 audit.setCreatedBy(oldAuditO.getCreatedBy());
-                audit.setModifiedBy("Tony Montana");
+                audit.setModifiedBy("Ivan Pereoridaroga");
                 audit.setCreatedAt(oldAuditO.getCreatedAt());
                 audit.setModifiedAt(LocalDateTime.now());
                 audit.setNewEntityJson(json);
                 audit.setEntityJson(oldAuditO.getEntityJson());
                 auditRepository.save(audit);
+
                 log.info("Updated audit record for entity: {}", result.getClass().getSimpleName());
             } else {
                 log.warn("No previous audit record found for entity ID: {}", objectMapper.readTree(json).get("id"));

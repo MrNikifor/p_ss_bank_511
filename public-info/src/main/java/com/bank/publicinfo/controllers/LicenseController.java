@@ -38,9 +38,13 @@ public class LicenseController {
     @ApiResponse(responseCode = "201", description = "Лицензия успешно создана")
     @PostMapping
     public ResponseEntity<LicenseDTO> createLicense(@Valid @RequestBody LicenseDTO licenseDto) {
+
         log.info("Creating license with data: {}", licenseDto);
+
         LicenseDTO createdLicense = licenseService.createLicense(licenseDto);
+
         log.info("License created successfully with ID: {}", createdLicense.getId());
+
         return new ResponseEntity<>(createdLicense, HttpStatus.CREATED);
     }
 
@@ -49,9 +53,13 @@ public class LicenseController {
     @ApiResponse(responseCode = "404", description = "Лицензия не найдена")
     @GetMapping("/{id}")
     public ResponseEntity<LicenseDTO> getLicenseById(@PathVariable Long id) {
+
         log.info("Fetching license with ID: {}", id);
+
         LicenseDTO license = licenseService.getLicenseById(id);
+
         log.info("License retrieved successfully: {}", license);
+
         return new ResponseEntity<>(license, HttpStatus.OK);
     }
 
@@ -59,9 +67,13 @@ public class LicenseController {
     @ApiResponse(responseCode = "200", description = "Список лицензий успешно получен")
     @GetMapping
     public ResponseEntity<List<LicenseDTO>> getAllLicenses() {
+
         log.info("Fetching all licenses");
+
         List<LicenseDTO> licenses = licenseService.getAllLicenses();
+
         log.info("Total licenses retrieved: {}", licenses.size());
+
         return new ResponseEntity<>(licenses, HttpStatus.OK);
     }
 
@@ -72,9 +84,12 @@ public class LicenseController {
     public ResponseEntity<LicenseDTO> updateLicense(@PathVariable Long id,
                                                     @Valid @RequestBody LicenseDTO licenseDto) {
         log.info("Updating license with ID: {}", id);
+
         licenseDto.setId(id);
         LicenseDTO updatedLicense = licenseService.updateLicense(licenseDto);
+
         log.info("License updated successfully with ID: {}", updatedLicense.getId());
+
         return new ResponseEntity<>(updatedLicense, HttpStatus.OK);
     }
 
@@ -83,9 +98,13 @@ public class LicenseController {
     @ApiResponse(responseCode = "404", description = "Лицензия не найдена")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLicense(@PathVariable Long id) {
+
         log.info("Deleting license with ID: {}", id);
+
         licenseService.deleteLicense(id);
+
         log.info("License deleted successfully with ID: {}", id);
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
