@@ -3,3 +3,8 @@ spring:
     name: account-app
   profiles:
     active: local
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka

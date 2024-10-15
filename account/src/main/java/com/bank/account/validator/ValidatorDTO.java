@@ -16,7 +16,7 @@ import java.util.Set;
 public class ValidatorDTO {
     private final Validator validator;
 
-    public void validate(AccountDetailsDTO accountDetailsDTO) {
+    public AccountDetailsDTO validate(AccountDetailsDTO accountDetailsDTO) {
         Set<ConstraintViolation<AccountDetailsDTO>> constraintViolations = validator.validate(accountDetailsDTO);
         if (!constraintViolations.isEmpty()) {
             String resultViolation = constraintViolations.stream()
@@ -25,5 +25,6 @@ public class ValidatorDTO {
             log.error("Данные не валидны, ошибки валидации: {}", resultViolation);
             throw new ValidationException(resultViolation);
         }
+        return accountDetailsDTO;
     }
 }

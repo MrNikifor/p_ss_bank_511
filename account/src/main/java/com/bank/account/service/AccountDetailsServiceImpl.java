@@ -37,6 +37,8 @@ public class AccountDetailsServiceImpl implements AccountDetailsService {
             accountDetailsRepository.save(accountDetails);
             log.info("Обновлены детали счёта {}", accountDetails);
             return accountDetails;
+        } catch (AccountNotFoundException e) {
+            throw e;
         } catch (Exception e) {
             log.error(e.getMessage());
             throw e;
