@@ -24,7 +24,7 @@ import java.time.LocalTime;
 @Table(name = "atm")
 public class ATM {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // Уникальный идентификатор банкомата
 
     @Column(name = "address", nullable = false)
