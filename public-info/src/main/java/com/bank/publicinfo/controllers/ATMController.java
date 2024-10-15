@@ -98,6 +98,7 @@ public class ATMController {
     @ApiResponse(responseCode = "404", description = "Банкомат не найден")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteATM(@PathVariable Long id) {
+
         log.info("Deleting ATM with ID: {}", id);
 
         atmService.deleteATM(id);
