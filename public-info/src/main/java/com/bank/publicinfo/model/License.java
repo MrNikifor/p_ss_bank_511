@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,7 +31,7 @@ public class License {
     @Column(name = "photo", columnDefinition = "BLOB")
     private byte[] photo; // Фотография лицензии в виде массива байтов
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bank_details_id", nullable = false) // Связь с bank_details
     private BankDetails bankDetails; // Ссылка на bank_details, к которым относится лицензия
 }
