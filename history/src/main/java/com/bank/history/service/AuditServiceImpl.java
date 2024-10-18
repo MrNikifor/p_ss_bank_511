@@ -5,14 +5,12 @@ import com.bank.history.repository.AuditRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@Transactional
 public class AuditServiceImpl implements AuditService {
 
     private final AuditRepository auditRepository;
@@ -22,7 +20,7 @@ public class AuditServiceImpl implements AuditService {
         try {
             return auditRepository.findAll();
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("Audits not found");
             throw e;
         }
     }
@@ -32,7 +30,7 @@ public class AuditServiceImpl implements AuditService {
         try {
             return auditRepository.findById(id).orElse(null);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("Audit not found for ID: {}", id);
             throw e;
         }
     }
@@ -42,7 +40,7 @@ public class AuditServiceImpl implements AuditService {
         try {
             return auditRepository.findFirstByEntityJsonStartingWithOrderByModifiedAt(json);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("Audit not found");
             throw e;
         }
     }
@@ -52,7 +50,7 @@ public class AuditServiceImpl implements AuditService {
         try {
             auditRepository.save(audit);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("Error creating audit");
             throw e;
         }
     }

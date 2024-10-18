@@ -26,6 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -60,6 +61,8 @@ public class HistoryControllerTest {
                         .content("{\"id\":1}"))
                 .andExpect(status().isCreated())
                 .andExpect(content().string(expectedId.toString()));
+
+        verify(historyService).add(Mockito.any(HistoryDTO.class));
     }
 
     @Test
@@ -70,6 +73,8 @@ public class HistoryControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(historyDTO)));
+
+        verify(historyService).getById(1L);
     }
 
     @Test
@@ -92,11 +97,21 @@ public class HistoryControllerTest {
 
     @Test
     public void getAllHistories_ShouldReturnOk() throws Exception {
-        List<HistoryDTO> histories = Arrays.asList(new HistoryDTO(), new HistoryDTO());
+        HistoryDTO history1 = new HistoryDTO();
+        history1.setId(1L);
+
+        HistoryDTO history2 = new HistoryDTO();
+        history2.setId(2L);
+
+        List<HistoryDTO> histories = Arrays.asList(history1, history2);
+
         when(historyService.findAll()).thenReturn(histories);
 
         mockMvc.perform(get("/api/history"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(histories)));
+                .andExpect(jsonPath("$[0].id").value(1L))
+                .andExpect(jsonPath("$[1].id").value(2L));
+
+        verify(historyService).findAll();
     }
 }
