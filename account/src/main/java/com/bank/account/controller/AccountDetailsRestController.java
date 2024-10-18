@@ -1,8 +1,6 @@
-package com.bank.account.controller.accountDetailsController;
+package com.bank.account.controller;
 
 import com.bank.account.dto.AccountDetailsDTO;
-import com.bank.account.entity.AccountDetails;
-import com.bank.account.mapper.AccountDetailsMapper;
 import com.bank.account.service.AccountDetailsService;
 import com.bank.account.validator.ValidatorDTO;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,18 +24,17 @@ import java.util.List;
 @RequestMapping("/rest")
 public class AccountDetailsRestController {
     private final AccountDetailsService accountDetailsService;
-    private final AccountDetailsMapper accountDetailsMapper;
     private final ValidatorDTO validatorDTO;
 
     @Tag(name = "Получение всех счетов", description = "Получение всех имеющихся счетов на данный момент")
     @GetMapping("/account_details")
-    public List<AccountDetails> getAllAccountDetails() {
+    public List<AccountDetailsDTO> getAllAccountDetails() {
         return accountDetailsService.getAllAccountDetails();
     }
 
     @Tag(name = "Получение одного счёта", description = "Получение счёта по его ID(ID указывается в заголовке")
     @GetMapping("/account_details/{id}")
-    public AccountDetails getAccountDetailsById(@PathVariable Long id) {
+    public AccountDetailsDTO getAccountDetailsById(@PathVariable Long id) {
         return accountDetailsService.getAccountDetails(id);
     }
 
@@ -46,9 +43,8 @@ public class AccountDetailsRestController {
     public ResponseEntity saveAccountDetails(@RequestBody AccountDetailsDTO accountDetailsDTO) {
         try {
             validatorDTO.validate(accountDetailsDTO);
-            AccountDetails accountDetails = accountDetailsMapper.INSTANCE.toEntity(accountDetailsDTO);
-            accountDetailsService.saveAccountDetails(accountDetails);
-            return new ResponseEntity(accountDetails, HttpStatus.CREATED);
+            accountDetailsService.saveAccountDetails(accountDetailsDTO);
+            return new ResponseEntity(accountDetailsDTO, HttpStatus.CREATED);
         } catch (ValidationException e) {
             return new ResponseEntity("Ошибка при создании счёта: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -59,9 +55,8 @@ public class AccountDetailsRestController {
     public ResponseEntity updateAccountDetails(@RequestBody AccountDetailsDTO accountDetailsDTO) {
         try {
             validatorDTO.validate(accountDetailsDTO);
-            AccountDetails accountDetails = accountDetailsMapper.INSTANCE.toEntity(accountDetailsDTO);
-            accountDetailsService.updateAccountDetails(accountDetails);
-            return new ResponseEntity<>(accountDetails, HttpStatus.OK);
+            accountDetailsService.updateAccountDetails(accountDetailsDTO);
+            return new ResponseEntity<>(accountDetailsDTO, HttpStatus.OK);
         } catch (ValidationException e) {
             return new ResponseEntity<>("Ошибка при обновлении счёта: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }

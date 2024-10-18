@@ -1,13 +1,13 @@
 package com.bank.account.service;
 
-import com.bank.account.entity.AccountDetails;
+import com.bank.account.dto.AccountDetailsDTO;
 
 import java.util.List;
 
 public interface AccountDetailsService {
-    AccountDetails saveAccountDetails(AccountDetails accountDetails);
-    AccountDetails updateAccountDetails(AccountDetails accountDetails);
-    AccountDetails getAccountDetails(Long id);
-    List<AccountDetails> getAllAccountDetails();
-    void deleteAccountDetails(AccountDetails accountDetails);
+    AccountDetailsDTO saveAccountDetails(AccountDetailsDTO accountDetailsDTO);
+    AccountDetailsDTO updateAccountDetails(AccountDetailsDTO accountDetailsDTO);
+    AccountDetailsDTO getAccountDetails(Long id);
+    List<AccountDetailsDTO> getAllAccountDetails();
+    void deleteAccountDetails(AccountDetailsDTO accountDetailsDTO);
 }
