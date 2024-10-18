@@ -1,5 +1,6 @@
 package com.bank.account.service;
 
+import com.bank.account.dto.AccountDetailsDTO;
 import com.bank.account.entity.AccountDetails;
 import com.bank.account.exception.AccountNotFoundException;
 import com.bank.account.repository.AccountDetailsRepository;
@@ -29,6 +30,7 @@ class AccountDetailsServiceTest {
     @InjectMocks
     private AccountDetailsServiceImpl accountDetailsService;
     private AccountDetails accountDetails;
+    private AccountDetailsDTO accountDetailsDTO;
 
     @BeforeEach
     void setUpAccountDetails() {
@@ -41,16 +43,25 @@ class AccountDetailsServiceTest {
         accountDetails.setMoney(BigDecimal.valueOf(1234567.00));
         accountDetails.setNegativeBalance(false);
         accountDetails.setProfileId(1L);
+
+        accountDetailsDTO = new AccountDetailsDTO();
+        accountDetailsDTO.setId(1L);
+        accountDetailsDTO.setPassportId(1L);
+        accountDetailsDTO.setAccountNumber(1L);
+        accountDetailsDTO.setBankDetailsId(1L);
+        accountDetailsDTO.setMoney(BigDecimal.valueOf(1234567.00));
+        accountDetailsDTO.setNegativeBalance(false);
+        accountDetailsDTO.setProfileId(1L);
     }
 
     @Test
     void saveAccountDetails() {
         when(accountDetailsRepository.save(accountDetails)).thenReturn(accountDetails);
 
-        AccountDetails testAccountDetails = accountDetailsService.saveAccountDetails(accountDetails);
+        AccountDetailsDTO testAccountDetails = accountDetailsService.saveAccountDetails(accountDetailsDTO);
 
         assertNotNull(testAccountDetails);
-        assertEquals(testAccountDetails.getId(), accountDetails.getId());
+        assertEquals(testAccountDetails.getId(), accountDetailsDTO.getId());
         verify(accountDetailsRepository, times(1)).save(accountDetails);
     }
 
@@ -59,7 +70,7 @@ class AccountDetailsServiceTest {
         Exception expectedException = new RuntimeException("Ошибка сохранения в репозитории");
         doThrow(expectedException).when(accountDetailsRepository).save(accountDetails);
 
-        assertThrows(RuntimeException.class, () -> accountDetailsService.saveAccountDetails(accountDetails));
+        assertThrows(RuntimeException.class, () -> accountDetailsService.saveAccountDetails(accountDetailsDTO));
         verify(accountDetailsRepository, times(1)).save(accountDetails);
     }
 
@@ -68,9 +79,9 @@ class AccountDetailsServiceTest {
         when(accountDetailsRepository.findById(accountDetails.getId())).thenReturn(Optional.of(accountDetails));
         when(accountDetailsRepository.save(accountDetails)).thenReturn(accountDetails);
 
-        AccountDetails updatedAccountDetails = accountDetailsService.updateAccountDetails(accountDetails);
+        AccountDetailsDTO updatedAccountDetails = accountDetailsService.updateAccountDetails(accountDetailsDTO);
 
-        assertEquals(accountDetails, updatedAccountDetails);
+        assertEquals(accountDetailsDTO, updatedAccountDetails);
         verify(accountDetailsRepository, times(1)).findById(accountDetails.getId());
         verify(accountDetailsRepository, times(1)).save(accountDetails);
     }
@@ -79,7 +90,7 @@ class AccountDetailsServiceTest {
     void updateAccountDetails_notFound() {
         when(accountDetailsRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(AccountNotFoundException.class, () -> accountDetailsService.updateAccountDetails(accountDetails));
+        assertThrows(AccountNotFoundException.class, () -> accountDetailsService.updateAccountDetails(accountDetailsDTO));
         verify(accountDetailsRepository, times(1)).findById(1L);
         verify(accountDetailsRepository, never()).save(accountDetails);
     }
@@ -90,7 +101,7 @@ class AccountDetailsServiceTest {
         Exception expectedException = new RuntimeException("Ошибка обновления данных в репозитории");
         doThrow(expectedException).when(accountDetailsRepository).save(accountDetails);
 
-        assertThrows(RuntimeException.class, () -> accountDetailsService.updateAccountDetails(accountDetails));
+        assertThrows(RuntimeException.class, () -> accountDetailsService.updateAccountDetails(accountDetailsDTO));
         verify(accountDetailsRepository, times(1)).findById(1L);
         verify(accountDetailsRepository, times(1)).save(accountDetails);
     }
@@ -100,9 +111,9 @@ class AccountDetailsServiceTest {
     void getAccountDetails() {
         when(accountDetailsRepository.findById(1L)).thenReturn(Optional.of(accountDetails));
 
-        AccountDetails retrievedAccountDetails = accountDetailsService.getAccountDetails(1L);
+        AccountDetailsDTO retrievedAccountDetails = accountDetailsService.getAccountDetails(1L);
 
-        assertEquals(accountDetails, retrievedAccountDetails);
+        assertEquals(accountDetailsDTO, retrievedAccountDetails);
         verify(accountDetailsRepository, times(1)).findById(1L);
     }
 
@@ -118,7 +129,7 @@ class AccountDetailsServiceTest {
     void getAllAccountDetails() {
         when(accountDetailsRepository.findAll()).thenReturn(List.of(accountDetails));
 
-        List<AccountDetails> allAccountDetails = accountDetailsService.getAllAccountDetails();
+        List<AccountDetailsDTO> allAccountDetails = accountDetailsService.getAllAccountDetails();
 
         assertEquals(1, allAccountDetails.size());
         verify(accountDetailsRepository, times(1)).findAll();
@@ -128,7 +139,7 @@ class AccountDetailsServiceTest {
     void getAllAccountDetailsWithEmptyList() {
         when(accountDetailsRepository.findAll()).thenReturn(Collections.emptyList());
 
-        List<AccountDetails> accountDetails = accountDetailsService.getAllAccountDetails();
+        List<AccountDetailsDTO> accountDetails = accountDetailsService.getAllAccountDetails();
 
         assertEquals(0, accountDetails.size());
         verify(accountDetailsRepository, times(1)).findAll();
@@ -147,7 +158,7 @@ class AccountDetailsServiceTest {
     void deleteAccountDetails() {
         when(accountDetailsRepository.findById(1L)).thenReturn(Optional.of(accountDetails));
 
-        accountDetailsService.deleteAccountDetails(accountDetails);
+        accountDetailsService.deleteAccountDetails(accountDetailsDTO);
 
         verify(accountDetailsRepository, times(1)).findById(1L);
         verify(accountDetailsRepository, times(1)).delete(accountDetails);
@@ -157,7 +168,7 @@ class AccountDetailsServiceTest {
     void deleteAccountDetails_notFound() {
         when(accountDetailsRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(AccountNotFoundException.class, () -> accountDetailsService.deleteAccountDetails(accountDetails));
+        assertThrows(AccountNotFoundException.class, () -> accountDetailsService.deleteAccountDetails(accountDetailsDTO));
         verify(accountDetailsRepository, times(1)).findById(1L);
         verify(accountDetailsRepository, never()).delete(accountDetails);
     }

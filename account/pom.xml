@@ -94,7 +94,6 @@
                         <exclude>com/bank/account/AccountApplication.**</exclude>
                         <exclude>com/bank/account/dto/**</exclude>
                         <exclude>com/bank/account/aspect/**</exclude>
-                        <exclude>com/bank/account/controller/auditController/**</exclude>
                         <exclude>com/bank/account/service/AuditServiceImpl.**</exclude>
                     </excludes>
                 </configuration>

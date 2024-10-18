@@ -10,12 +10,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.bank.account.controller.AccountDetailsRestController;
 import com.bank.account.dto.AccountDetailsDTO;
 import com.bank.account.entity.AccountDetails;
 import com.bank.account.mapper.AccountDetailsMapper;
 import com.bank.account.service.AccountDetailsService;
 import com.bank.account.validator.ValidatorDTO;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -72,7 +72,7 @@ class AccountDetailsRestControllerTest {
     @Test
     @WithMockUser(username = "user", password = "user")
     void getAllAccountDetails() throws Exception {
-        when(accountDetailsService.getAllAccountDetails()).thenReturn(List.of(accountDetails));
+        when(accountDetailsService.getAllAccountDetails()).thenReturn(List.of(accountDetailsDTO));
 
         mockMvc.perform(get("/rest/account_details")
                         .accept(MediaType.APPLICATION_JSON))
@@ -89,7 +89,7 @@ class AccountDetailsRestControllerTest {
     @Test
     @WithMockUser(username = "user", password = "user")
     void getAccountDetailsById() throws Exception {
-        when(accountDetailsService.getAccountDetails(1L)).thenReturn(accountDetails);
+        when(accountDetailsService.getAccountDetails(1L)).thenReturn(accountDetailsDTO);
 
         mockMvc.perform(get("/rest/account_details/{id}", 1L)
                         .accept(MediaType.APPLICATION_JSON))
@@ -107,14 +107,14 @@ class AccountDetailsRestControllerTest {
     @WithMockUser(username = "user", password = "user")
     void saveAccountDetails() throws Exception {
         when(accountDetailsMapper.toEntity(accountDetailsDTO)).thenReturn(accountDetails);
-        when(accountDetailsService.saveAccountDetails(accountDetails)).thenReturn(accountDetails);
+        when(accountDetailsService.saveAccountDetails(accountDetailsDTO)).thenReturn(accountDetailsDTO);
 
         mockMvc.perform(post("/rest/account_details")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(accountDetailsDTO)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(accountDetails.getId()));
-        verify(accountDetailsService, times(1)).saveAccountDetails(accountDetails);
+        verify(accountDetailsService, times(1)).saveAccountDetails(accountDetailsDTO);
     }
 
     @Test
@@ -134,14 +134,14 @@ class AccountDetailsRestControllerTest {
     @WithMockUser(username = "user", password = "user")
     void updateAccountDetails() throws Exception {
         when(accountDetailsMapper.toEntity(accountDetailsDTO)).thenReturn(accountDetails);
-        when(accountDetailsService.updateAccountDetails(accountDetails)).thenReturn(accountDetails);
+        when(accountDetailsService.updateAccountDetails(accountDetailsDTO)).thenReturn(accountDetailsDTO);
 
         mockMvc.perform(put("/rest/account_details")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(accountDetailsDTO)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(accountDetails.getId()));
-        verify(accountDetailsService, times(1)).updateAccountDetails(accountDetails);
+        verify(accountDetailsService, times(1)).updateAccountDetails(accountDetailsDTO);
     }
 
     @Test
