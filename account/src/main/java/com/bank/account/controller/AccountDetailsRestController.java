@@ -1,8 +1,6 @@
 package com.bank.account.controller;
 
 import com.bank.account.dto.AccountDetailsDTO;
-import com.bank.account.entity.AccountDetails;
-import com.bank.account.mapper.AccountDetailsMapper;
 import com.bank.account.service.AccountDetailsService;
 import com.bank.account.validator.ValidatorDTO;
 import io.swagger.v3.oas.annotations.tags.Tag;
