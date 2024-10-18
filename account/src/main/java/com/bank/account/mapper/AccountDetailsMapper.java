@@ -9,4 +9,5 @@ import org.mapstruct.factory.Mappers;
 public interface AccountDetailsMapper {
     AccountDetailsMapper INSTANCE = Mappers.getMapper(AccountDetailsMapper.class);
     AccountDetails toEntity(AccountDetailsDTO accountDetailsDTO);
+    AccountDetailsDTO toDTO(AccountDetails accountDetails);
 }
