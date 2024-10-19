@@ -1,6 +1,6 @@
 package com.bank.publicinfo.controllers;
 
-import com.bank.publicinfo.dto.CertificateDTO;
+import com.bank.publicinfo.dto.CertificateDto;
 import com.bank.publicinfo.service.CertificateService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -37,11 +37,11 @@ public class CertificateController {
     @Operation(summary = "Создать новый сертификат")
     @ApiResponse(responseCode = "201", description = "Сертификат успешно создан")
     @PostMapping
-    public ResponseEntity<CertificateDTO> createCertificate(@Valid @RequestBody CertificateDTO certificateDto) {
+    public ResponseEntity<CertificateDto> createCertificate(@Valid @RequestBody CertificateDto certificateDto) {
 
         log.info("Creating certificate with data: {}", certificateDto);
 
-        CertificateDTO createdCertificate = certificateService.createCertificate(certificateDto);
+        CertificateDto createdCertificate = certificateService.createCertificate(certificateDto);
 
         log.info("Certificate created successfully with ID: {}", createdCertificate.getId());
 
@@ -52,11 +52,11 @@ public class CertificateController {
     @ApiResponse(responseCode = "200", description = "Сертификат успешно получен")
     @ApiResponse(responseCode = "404", description = "Сертификат не найден")
     @GetMapping("/{id}")
-    public ResponseEntity<CertificateDTO> getCertificateById(@PathVariable Long id) {
+    public ResponseEntity<CertificateDto> getCertificateById(@PathVariable Long id) {
 
         log.info("Fetching certificate with ID: {}", id);
 
-        CertificateDTO certificate = certificateService.getCertificateById(id);
+        CertificateDto certificate = certificateService.getCertificateById(id);
 
         log.info("Certificate retrieved successfully: {}", certificate);
 
@@ -66,11 +66,11 @@ public class CertificateController {
     @Operation(summary = "Получить список всех сертификатов")
     @ApiResponse(responseCode = "200", description = "Список сертификатов успешно получен")
     @GetMapping
-    public ResponseEntity<List<CertificateDTO>> getAllCertificates() {
+    public ResponseEntity<List<CertificateDto>> getAllCertificates() {
 
         log.info("Fetching all certificates");
 
-        List<CertificateDTO> certificates = certificateService.getAllCertificates();
+        List<CertificateDto> certificates = certificateService.getAllCertificates();
 
         log.info("Total certificates retrieved: {}", certificates.size());
 
@@ -81,12 +81,12 @@ public class CertificateController {
     @ApiResponse(responseCode = "204", description = "Информация о сертификате успешно обновлена")
     @ApiResponse(responseCode = "404", description = "Сертификат не найден")
     @PutMapping("/{id}")
-    public ResponseEntity<CertificateDTO> updateCertificate(@PathVariable Long id,
-                                                            @Valid @RequestBody CertificateDTO certificateDto) {
+    public ResponseEntity<CertificateDto> updateCertificate(@PathVariable Long id,
+                                                            @Valid @RequestBody CertificateDto certificateDto) {
         log.info("Updating certificate with ID: {}", id);
 
         certificateDto.setId(id);
-        CertificateDTO updatedCertificate = certificateService.updateCertificate(certificateDto);
+        CertificateDto updatedCertificate = certificateService.updateCertificate(certificateDto);
 
         log.info("Certificate updated successfully with ID: {}", updatedCertificate.getId());
 

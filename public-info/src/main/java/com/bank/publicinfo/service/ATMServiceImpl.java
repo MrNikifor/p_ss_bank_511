@@ -1,6 +1,6 @@
 package com.bank.publicinfo.service;
 
-import com.bank.publicinfo.dto.ATMDTO;
+import com.bank.publicinfo.dto.ATMDto;
 import com.bank.publicinfo.exception.ResourceNotFoundException;
 import com.bank.publicinfo.mapper.AutoATMMapper;
 import com.bank.publicinfo.model.ATM;
@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,92 +25,72 @@ public class ATMServiceImpl implements ATMService {
 
     @Override
     @Transactional
-    public ATMDTO createATM(ATMDTO atmDTO) {
-
+    public ATMDto createATM(ATMDto atmDTO) {
         log.info("Creating a new ATM: {}", atmDTO);
-
-        if (atmDTO == null) {
-            log.error("Failed to create ATM: ATMDTO is null");
-            throw new IllegalArgumentException("ATMDTO must not be null");
-        }
+        validateAtmDTO(atmDTO);
 
         ATM atm = autoATMMapper.mapToATM(atmDTO);
         ATM savedAtm = atmRepository.save(atm);
 
         log.info("ATM successfully created: {}", savedAtm);
-
-        return autoATMMapper.mapToATMDTO(savedAtm);
+        return autoATMMapper.mapToATMDto(savedAtm);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public ATMDTO getATMById(Long id) {
-
+    public ATMDto getATMById(Long id) {
         log.info("Fetching ATM by ID: {}", id);
 
-        if (id == null) {
-            log.error("ID must not be null");
-            throw new IllegalArgumentException("ID must not be null");
-        }
-
-        ATM atm = atmRepository.findById(id)
+        Long validatedId = Optional.ofNullable(id)
                 .orElseThrow(() -> {
-                    log.error("ATM with ID {} not found", id);
+                    log.error("ID must not be null");
+                    return new IllegalArgumentException("ID must not be null");
+                });
+
+        ATM atm = atmRepository.findById(validatedId)
+                .orElseThrow(() -> {
+                    log.error("ATM with ID {} not found", validatedId);
                     return new ResourceNotFoundException("ATM not found");
                 });
 
         log.info("ATM found: {}", atm);
-
-        return autoATMMapper.mapToATMDTO(atm);
+        return autoATMMapper.mapToATMDto(atm);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<ATMDTO> getAllATMs() {
-
+    public List<ATMDto> getAllATMs() {
         log.info("Fetching all ATMs");
 
         List<ATM> atms = atmRepository.findAll();
-
         return atms.stream()
-                .map(autoATMMapper::mapToATMDTO)
+                .map(autoATMMapper::mapToATMDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public ATMDTO updateATM(ATMDTO atmDTO) {
-
+    public ATMDto updateATM(ATMDto atmDTO) {
         log.info("Updating ATM: {}", atmDTO);
+        validateAtmDTO(atmDTO);
 
-        if (atmDTO == null) {
-            log.error("Failed to update ATM: ATMDTO is null");
-            throw new IllegalArgumentException("ATMDTO must not be null");
-        }
-
-        Long id = atmDTO.getId();
-
-        if (id == null) {
-            log.error("ID must not be null");
-            throw new IllegalArgumentException("ID must not be null");
-        }
-
-        ATM existingATM = atmRepository.findById(id)
+        Long validatedId = Optional.ofNullable(atmDTO.getId())
                 .orElseThrow(() -> {
-                    log.error("ATM with ID {} not found", id);
+                    log.error("ID must not be null");
+                    return new IllegalArgumentException("ID must not be null");
+                });
+
+        ATM existingATM = atmRepository.findById(validatedId)
+                .orElseThrow(() -> {
+                    log.error("ATM with ID {} not found", validatedId);
                     return new ResourceNotFoundException("ATM not found");
                 });
 
-        existingATM.setAddress(atmDTO.getAddress());
-        existingATM.setStartOfWork(atmDTO.getStartOfWork());
-        existingATM.setEndOfWork(atmDTO.getEndOfWork());
-        existingATM.setAllHours(atmDTO.getAllHours());
-
+        autoATMMapper.updateATMFromDto(atmDTO, existingATM);
         ATM updatedATM = atmRepository.save(existingATM);
 
         log.info("ATM successfully updated: {}", updatedATM);
-
-        return autoATMMapper.mapToATMDTO(updatedATM);
+        return autoATMMapper.mapToATMDto(updatedATM);
     }
 
     @Override
@@ -117,33 +98,40 @@ public class ATMServiceImpl implements ATMService {
     public void deleteATM(Long id) {
         log.info("Deleting ATM with ID: {}", id);
 
-        if (id == null) {
-            log.error("ID must not be null");
-            throw new IllegalArgumentException("ID must not be null");
-        }
+        Long validatedId = Optional.ofNullable(id)
+                .orElseThrow(() -> {
+                    log.error("ID must not be null");
+                    return new IllegalArgumentException("ID must not be null");
+                });
 
-        if (!atmRepository.existsById(id)) {
-            log.error("ATM with ID {} not found", id);
+        if (!atmRepository.existsById(validatedId)) {
+            log.error("No ATM found with ID: {}", validatedId);
             throw new ResourceNotFoundException("ATM not found");
         }
 
-        atmRepository.deleteById(id);
-        log.info("ATM with ID {} successfully deleted", id);
+        atmRepository.deleteById(validatedId);
+        log.info("ATM with ID {} successfully deleted", validatedId);
     }
 
     @Override
     public boolean isATMAvailable(Long id) {
         log.info("Checking availability of ATM with ID: {}", id);
 
-        ATM atm = atmRepository.findById(id)
+        Long validatedId = Optional.ofNullable(id)
                 .orElseThrow(() -> {
-                    log.error("ATM with ID {} not found", id);
+                    log.error("ID must not be null");
+                    return new IllegalArgumentException("ID must not be null");
+                });
+
+        ATM atm = atmRepository.findById(validatedId)
+                .orElseThrow(() -> {
+                    log.error("ATM with ID {} not found", validatedId);
                     return new ResourceNotFoundException("ATM not found");
                 });
 
         LocalTime currentTime = LocalTime.now();
 
-        if (atm.getAllHours() != null && atm.getAllHours()) {
+        if (Boolean.TRUE.equals(atm.getAllHours())) {
             log.info("The ATM operates 24/7.");
             return true;
         }
@@ -156,5 +144,12 @@ public class ATMServiceImpl implements ATMService {
 
         log.warn("Working hours are not specified; the ATM is considered unavailable.");
         return false;
+    }
+
+    private void validateAtmDTO(ATMDto atmDTO) {
+        if (atmDTO == null) {
+            log.error("Failed to process ATM: ATMDTO is null");
+            throw new IllegalArgumentException("ATMDTO must not be null");
+        }
     }
 }

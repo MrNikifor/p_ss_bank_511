@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CertificateDTO {
+public class LicenseDto {
     private Long id;
 
     private byte[] photo;

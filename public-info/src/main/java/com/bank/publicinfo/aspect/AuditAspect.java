@@ -1,7 +1,7 @@
 package com.bank.publicinfo.aspect;
 
 import com.bank.publicinfo.model.Audit;
-import com.bank.publicinfo.repositories.AuditRepository;
+import com.bank.publicinfo.service.AuditService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -21,15 +21,17 @@ import java.util.Optional;
 @Slf4j
 public class AuditAspect {
 
-    private final AuditRepository auditRepository;
+    private final AuditService auditService;
     private final ObjectMapper objectMapper;
-
 
     @AfterReturning(pointcut = "execution(* com.bank.publicinfo.service.*.create*(..))", returning = "result")
     public void afterResultCreateAdvice(JoinPoint joinPoint, Object result) {
+        if (result == null) {
+            log.warn("Result is null for method: {}", joinPoint.getSignature().getName());
+            return;
+        }
 
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
-
         Audit audit = new Audit();
         try {
             String entityJson = objectMapper.writeValueAsString(result);
@@ -38,7 +40,7 @@ public class AuditAspect {
             audit.setCreatedBy("Ivan Pereoridaroga");
             audit.setCreatedAt(LocalDateTime.now());
             audit.setEntityJson(entityJson);
-            auditRepository.save(audit);
+            auditService.createAudit(audit);
 
             log.info("Created audit record for entity: {}", result.getClass().getSimpleName());
         } catch (JsonProcessingException e) {
@@ -49,13 +51,17 @@ public class AuditAspect {
 
     @AfterReturning(pointcut = "execution(* com.bank.publicinfo.service.*.update*(..))", returning = "result")
     public void afterResultUpdateAdvice(JoinPoint joinPoint, Object result) {
+        if (result == null) {
+            log.warn("Result is null for method: {}", joinPoint.getSignature().getName());
+            return;
+        }
 
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
-
         Audit audit = new Audit();
         try {
             String json = objectMapper.writeValueAsString(result);
-            Optional<Audit> oldAudit = auditRepository.findFirstByEntityJsonStartingWithOrderByModifiedAt("{\"id\":" + objectMapper.readTree(json).get("id") + ",");
+            Optional<Audit> oldAudit = auditService.findFirstByEntityJsonStartingWith("{\"id\":" + objectMapper.readTree(json).get("id") + ",");
+
             if (oldAudit.isPresent()) {
                 Audit oldAuditO = oldAudit.get();
                 audit.setEntityType(result.getClass().getSimpleName());
@@ -66,7 +72,7 @@ public class AuditAspect {
                 audit.setModifiedAt(LocalDateTime.now());
                 audit.setNewEntityJson(json);
                 audit.setEntityJson(oldAuditO.getEntityJson());
-                auditRepository.save(audit);
+                auditService.createAudit(audit);
 
                 log.info("Updated audit record for entity: {}", result.getClass().getSimpleName());
             } else {

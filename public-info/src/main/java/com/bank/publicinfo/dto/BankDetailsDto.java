@@ -1,16 +1,19 @@
 package com.bank.publicinfo.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.Size;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BankDetailsDTO {
+public class BankDetailsDto {
+
     private Long id;
 
     private long bik;
@@ -30,7 +33,7 @@ public class BankDetailsDTO {
     @Size(max = 80, message = "Bank name is required and must be less than 80 characters")
     private String name;
 
-    private Set<LicenseDTO> licenses;
+    private Set<LicenseDto> licenses;
 
-    private Set<CertificateDTO> certificates;
+    private Set<CertificateDto> certificates;
 }

@@ -1,6 +1,6 @@
 package com.bank.publicinfo.controllers;
 
-import com.bank.publicinfo.dto.ATMDTO;
+import com.bank.publicinfo.dto.ATMDto;
 import com.bank.publicinfo.service.ATMService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -37,11 +37,11 @@ public class ATMController {
     @Operation(summary = "Создать новый банкомат")
     @ApiResponse(responseCode = "201", description = "Банкомат успешно создан")
     @PostMapping
-    public ResponseEntity<ATMDTO> createATM(@Valid @RequestBody ATMDTO atmDTO) {
+    public ResponseEntity<ATMDto> createATM(@Valid @RequestBody ATMDto atmDto) {
 
-        log.info("Creating ATM with details: {}", atmDTO);
+        log.info("Creating ATM with details: {}", atmDto);
 
-        ATMDTO createdATM = atmService.createATM(atmDTO);
+        ATMDto createdATM = atmService.createATM(atmDto);
 
         log.info("ATM created successfully with ID: {}", createdATM.getId());
 
@@ -52,11 +52,11 @@ public class ATMController {
     @ApiResponse(responseCode = "200", description = "Информация о банкомате успешно получена")
     @ApiResponse(responseCode = "404", description = "Банкомат не найден")
     @GetMapping("/{id}")
-    public ResponseEntity<ATMDTO> getATMById(@PathVariable Long id) {
+    public ResponseEntity<ATMDto> getATMById(@PathVariable Long id) {
 
         log.info("Fetching ATM with ID: {}", id);
 
-        ATMDTO atm = atmService.getATMById(id);
+        ATMDto atm = atmService.getATMById(id);
 
         log.info("ATM retrieved successfully: {}", atm);
 
@@ -66,11 +66,11 @@ public class ATMController {
     @Operation(summary = "Получить список всех банкоматов")
     @ApiResponse(responseCode = "200", description = "Список банкоматов успешно получен")
     @GetMapping
-    public ResponseEntity<List<ATMDTO>> getAllATMs() {
+    public ResponseEntity<List<ATMDto>> getAllATMs() {
 
         log.info("Fetching all ATMs");
 
-        List<ATMDTO> atms = atmService.getAllATMs();
+        List<ATMDto> atms = atmService.getAllATMs();
 
         log.info("Total ATMs retrieved: {}", atms.size());
 
@@ -81,12 +81,12 @@ public class ATMController {
     @ApiResponse(responseCode = "204", description = "Информация о банкомате успешно обновлена")
     @ApiResponse(responseCode = "404", description = "Банкомат не найден")
     @PutMapping("/{id}")
-    public ResponseEntity<ATMDTO> updateATM(@PathVariable Long id, @Valid @RequestBody ATMDTO atmDTO) {
+    public ResponseEntity<ATMDto> updateATM(@PathVariable Long id, @Valid @RequestBody ATMDto atmDTO) {
 
         log.info("Updating ATM with ID: {}", id);
 
         atmDTO.setId(id);
-        ATMDTO updatedATM = atmService.updateATM(atmDTO);
+        ATMDto updatedATM = atmService.updateATM(atmDTO);
 
         log.info("ATM updated successfully with ID: {}", updatedATM.getId());
 

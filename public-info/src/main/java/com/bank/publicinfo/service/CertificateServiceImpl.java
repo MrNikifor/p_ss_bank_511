@@ -1,6 +1,6 @@
 package com.bank.publicinfo.service;
 
-import com.bank.publicinfo.dto.CertificateDTO;
+import com.bank.publicinfo.dto.CertificateDto;
 import com.bank.publicinfo.exception.ResourceNotFoundException;
 import com.bank.publicinfo.mapper.AutoCertificateMapper;
 import com.bank.publicinfo.model.BankDetails;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,28 +27,14 @@ public class CertificateServiceImpl implements CertificateService {
 
     @Override
     @Transactional
-    public CertificateDTO createCertificate(CertificateDTO certificateDTO) {
-
+    public CertificateDto createCertificate(CertificateDto certificateDTO) {
         log.info("Creating new certificate: {}", certificateDTO);
-
-        if (certificateDTO == null) {
-
-            log.error("Failed to create certificate: CertificateDTO is null");
-            throw new IllegalArgumentException("CertificateDTO must not be null");
-        }
-
+        validateCertificateDTO(certificateDTO);
 
         Long bankDetailsId = certificateDTO.getBankDetailsId();
-        if (bankDetailsId == null) {
-
-            log.error("Failed to create certificate: BankDetails ID is null");
-            throw new IllegalArgumentException("BankDetails ID must not be null");
-        }
-
         BankDetails bankDetails = bankDetailsRepository.findById(bankDetailsId)
                 .orElseThrow(() -> {
                     log.error("Bank details not found for ID: {}", bankDetailsId);
-
                     return new ResourceNotFoundException("Bank details not found");
                 });
 
@@ -56,40 +43,36 @@ public class CertificateServiceImpl implements CertificateService {
         Certificate savedCertificate = certificateRepository.save(certificate);
 
         log.info("Certificate successfully created: {}", savedCertificate);
-
         return autoCertificateMapper.mapToCertificateDTO(savedCertificate);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public CertificateDTO getCertificateById(Long id) {
-
+    public CertificateDto getCertificateById(Long id) {
         log.info("Fetching certificate by ID: {}", id);
 
-        if (id == null) {
-            log.error("ID must not be null");
-            throw new IllegalArgumentException("ID must not be null");
-        }
-
-        Certificate certificate = certificateRepository.findById(id)
+        Long validatedId = Optional.ofNullable(id)
                 .orElseThrow(() -> {
-                    log.error("Certificate not found for ID: {}", id);
+                    log.error("ID must not be null");
+                    return new IllegalArgumentException("ID must not be null");
+                });
+
+        Certificate certificate = certificateRepository.findById(validatedId)
+                .orElseThrow(() -> {
+                    log.error("Certificate not found for ID: {}", validatedId);
                     return new ResourceNotFoundException("Certificate not found");
                 });
 
         log.info("Certificate found: {}", certificate);
-
         return autoCertificateMapper.mapToCertificateDTO(certificate);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<CertificateDTO> getAllCertificates() {
-
+    public List<CertificateDto> getAllCertificates() {
         log.info("Fetching all certificates");
 
         List<Certificate> certificates = certificateRepository.findAll();
-
         log.info("Total certificates fetched: {}", certificates.size());
 
         return certificates.stream()
@@ -99,35 +82,26 @@ public class CertificateServiceImpl implements CertificateService {
 
     @Override
     @Transactional
-    public CertificateDTO updateCertificate(CertificateDTO certificateDTO) {
-
+    public CertificateDto updateCertificate(CertificateDto certificateDTO) {
         log.info("Updating certificate: {}", certificateDTO);
+        validateCertificateDTO(certificateDTO);
 
-        if (certificateDTO == null) {
-            log.error("Failed to update certificate: CertificateDTO is null");
-            throw new IllegalArgumentException("CertificateDTO must not be null");
-        }
-
-        Long id = certificateDTO.getId();
-
-        if (id == null) {
-            log.error("ID must not be null");
-            throw new IllegalArgumentException("ID must not be null");
-        }
-
-        Certificate existingCertificate = certificateRepository.findById(id)
+        Long validatedId = Optional.ofNullable(certificateDTO.getId())
                 .orElseThrow(() -> {
-                    log.error("Certificate not found for ID: {}", id);
+                    log.error("ID must not be null");
+                    return new IllegalArgumentException("ID must not be null");
+                });
 
+        Certificate existingCertificate = certificateRepository.findById(validatedId)
+                .orElseThrow(() -> {
+                    log.error("Certificate not found for ID: {}", validatedId);
                     return new ResourceNotFoundException("Certificate not found");
                 });
 
         existingCertificate.setPhoto(certificateDTO.getPhoto());
-
         Certificate updatedCertificate = certificateRepository.save(existingCertificate);
 
         log.info("Certificate successfully updated: {}", updatedCertificate);
-
         return autoCertificateMapper.mapToCertificateDTO(updatedCertificate);
     }
 
@@ -136,18 +110,25 @@ public class CertificateServiceImpl implements CertificateService {
     public void deleteCertificate(Long id) {
         log.info("Deleting certificate with ID: {}", id);
 
-        if (id == null) {
-            log.error("ID must not be null");
-            throw new IllegalArgumentException("ID must not be null");
-        }
+        Long validatedId = Optional.ofNullable(id)
+                .orElseThrow(() -> {
+                    log.error("ID must not be null");
+                    return new IllegalArgumentException("ID must not be null");
+                });
 
-        if (!certificateRepository.existsById(id)) {
-            log.error("No certificate found with ID: {}", id);
+        if (!certificateRepository.existsById(validatedId)) {
+            log.error("No certificate found with ID: {}", validatedId);
             throw new ResourceNotFoundException("Certificate not found");
         }
 
-        certificateRepository.deleteById(id);
+        certificateRepository.deleteById(validatedId);
+        log.info("Certificate with ID {} successfully deleted", validatedId);
+    }
 
-        log.info("Certificate with ID {} successfully deleted", id);
+    private void validateCertificateDTO(CertificateDto certificateDTO) {
+        if (certificateDTO == null) {
+            log.error("Failed to process certificate: CertificateDTO is null");
+            throw new IllegalArgumentException("CertificateDTO must not be null");
+        }
     }
 }

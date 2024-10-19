@@ -1,6 +1,6 @@
 package com.bank.publicinfo.controllers;
 
-import com.bank.publicinfo.dto.BranchDTO;
+import com.bank.publicinfo.dto.BranchDto;
 import com.bank.publicinfo.service.BranchService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -37,11 +37,11 @@ public class BranchController {
     @Operation(summary = "Создать новое отделение банка")
     @ApiResponse(responseCode = "201", description = "Отделение банка успешно создано")
     @PostMapping
-    public ResponseEntity<BranchDTO> createBranch(@Valid @RequestBody BranchDTO branchDTO) {
+    public ResponseEntity<BranchDto> createBranch(@Valid @RequestBody BranchDto branchDto) {
 
-        log.info("Creating branch with data: {}", branchDTO);
+        log.info("Creating branch with data: {}", branchDto);
 
-        BranchDTO createdBranch = branchService.createBranch(branchDTO);
+        BranchDto createdBranch = branchService.createBranch(branchDto);
 
         log.info("Branch created successfully with ID: {}", createdBranch.getId());
 
@@ -52,11 +52,11 @@ public class BranchController {
     @ApiResponse(responseCode = "200", description = "Отделение банка успешно получено")
     @ApiResponse(responseCode = "404", description = "Отделение банка не найдено")
     @GetMapping("/{id}")
-    public ResponseEntity<BranchDTO> getBranchById(@PathVariable Long id) {
+    public ResponseEntity<BranchDto> getBranchById(@PathVariable Long id) {
 
         log.info("Fetching branch with ID: {}", id);
 
-        BranchDTO branch = branchService.getBranchById(id);
+        BranchDto branch = branchService.getBranchById(id);
 
         log.info("Branch retrieved successfully: {}", branch);
 
@@ -66,11 +66,11 @@ public class BranchController {
     @Operation(summary = "Получить список всех отделений банка")
     @ApiResponse(responseCode = "200", description = "Список отделений банка успешно получен")
     @GetMapping
-    public ResponseEntity<List<BranchDTO>> getAllBranches() {
+    public ResponseEntity<List<BranchDto>> getAllBranches() {
 
         log.info("Fetching all branches");
 
-        List<BranchDTO> branches = branchService.getAllBranches();
+        List<BranchDto> branches = branchService.getAllBranches();
 
         log.info("Total branches retrieved: {}", branches.size());
 
@@ -81,11 +81,11 @@ public class BranchController {
     @ApiResponse(responseCode = "204", description = "Информация об отделении банка успешно обновлена")
     @ApiResponse(responseCode = "404", description = "Отделение банка не найдено")
     @PutMapping("/{id}")
-    public ResponseEntity<BranchDTO> updateBranch(@PathVariable Long id,
-                                                  @Valid @RequestBody BranchDTO branchDTO) {
+    public ResponseEntity<BranchDto> updateBranch(@PathVariable Long id,
+                                                  @Valid @RequestBody BranchDto branchDTO) {
         log.info("Updating branch with ID: {}", id);
         branchDTO.setId(id);
-        BranchDTO updatedBranch = branchService.updateBranch(branchDTO);
+        BranchDto updatedBranch = branchService.updateBranch(branchDTO);
 
         log.info("Branch updated successfully with ID: {}", updatedBranch.getId());
 

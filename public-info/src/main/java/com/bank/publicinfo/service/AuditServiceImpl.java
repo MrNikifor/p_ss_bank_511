@@ -20,6 +20,12 @@ public class AuditServiceImpl implements AuditService {
     @Override
     public void createAudit(Audit audit) {
 
+        if (audit == null) {
+            log.error("Cannot create audit record: Audit object is null");
+
+            throw new IllegalArgumentException("Audit must not be null");
+        }
+
         log.info("Creating audit record: {}", audit);
 
         auditRepository.save(audit);
@@ -29,7 +35,6 @@ public class AuditServiceImpl implements AuditService {
 
     @Override
     public Optional<Audit> findFirstByEntityJsonStartingWith(String json) {
-
         log.info("Finding first audit record starting with JSON: {}", json);
 
         Optional<Audit> audit = auditRepository.findFirstByEntityJsonStartingWithOrderByModifiedAt(json);
@@ -44,20 +49,15 @@ public class AuditServiceImpl implements AuditService {
     }
 
     @Override
-    public Optional<Audit> findById(Long id) {
-
+    public Audit findById(Long id) {
         log.info("Finding audit record with ID: {}", id);
 
-        Optional<Audit> audit = Optional.ofNullable(auditRepository.findById(id)
-                .orElseThrow(() -> new AuditNotFoundException("Cannot delete. Audit not found with ID: " + id)));
+        return auditRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.warn("Audit not found with ID: {}", id);
 
-        if (audit.isPresent()) {
-            log.info("Found audit record: {}", audit.get());
-        } else {
-            log.warn("Audit not found with ID: {}", id);
-        }
-
-        return audit;
+                    return new AuditNotFoundException("Couldn't find a record for this id " + id);
+                });
     }
 
     @Override
@@ -74,11 +74,11 @@ public class AuditServiceImpl implements AuditService {
 
     @Override
     public void deleteById(Long id) {
-
         log.info("Attempting to delete audit record with ID: {}", id);
 
         if (!auditRepository.existsById(id)) {
             log.error("Cannot delete. Audit not found with ID: {}", id);
+
             throw new AuditNotFoundException("Cannot delete. Audit not found with ID: " + id);
         }
 

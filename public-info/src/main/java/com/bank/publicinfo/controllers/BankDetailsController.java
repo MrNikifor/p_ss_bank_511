@@ -1,6 +1,6 @@
 package com.bank.publicinfo.controllers;
 
-import com.bank.publicinfo.dto.BankDetailsDTO;
+import com.bank.publicinfo.dto.BankDetailsDto;
 import com.bank.publicinfo.service.BankDetailsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -37,16 +37,16 @@ public class BankDetailsController {
     @Operation(summary = "Создать новые реквизиты банка")
     @ApiResponse(responseCode = "201", description = "Реквизиты банка успешно созданы")
     @PostMapping
-    public ResponseEntity<BankDetailsDTO> createBankDetails(@Valid @RequestBody BankDetailsDTO bankDetailsDTO) {
+    public ResponseEntity<BankDetailsDto> createBankDetails(@Valid @RequestBody BankDetailsDto bankDetailsDto) {
 
-        log.info("Creating bank details with data: {}", bankDetailsDTO);
+        log.info("Creating bank details with data: {}", bankDetailsDto);
 
-        if (bankDetailsDTO.getJointStockCompany() == null) {
+        if (bankDetailsDto.getJointStockCompany() == null) {
             log.error("Joint stock company is null");
             throw new IllegalArgumentException("Joint stock company must not be null");
         }
 
-        BankDetailsDTO createdBankDetails = bankDetailsService.createBankDetails(bankDetailsDTO);
+        BankDetailsDto createdBankDetails = bankDetailsService.createBankDetails(bankDetailsDto);
 
         log.info("Bank details created successfully with ID: {}", createdBankDetails.getId());
 
@@ -57,11 +57,11 @@ public class BankDetailsController {
     @ApiResponse(responseCode = "200", description = "Реквизиты банка успешно получены")
     @ApiResponse(responseCode = "404", description = "Реквизиты банка не найдены")
     @GetMapping("/{id}")
-    public ResponseEntity<BankDetailsDTO> getBankDetailsById(@PathVariable Long id) {
+    public ResponseEntity<BankDetailsDto> getBankDetailsById(@PathVariable Long id) {
 
         log.info("Fetching bank details with ID: {}", id);
 
-        BankDetailsDTO bankDetails = bankDetailsService.getBankDetailsById(id);
+        BankDetailsDto bankDetails = bankDetailsService.getBankDetailsById(id);
 
         log.info("Bank details retrieved successfully: {}", bankDetails);
 
@@ -71,11 +71,11 @@ public class BankDetailsController {
     @Operation(summary = "Получить список всех реквизитов банков")
     @ApiResponse(responseCode = "200", description = "Список реквизитов банков успешно получен")
     @GetMapping
-    public ResponseEntity<List<BankDetailsDTO>> getAllBankDetails() {
+    public ResponseEntity<List<BankDetailsDto>> getAllBankDetails() {
 
         log.info("Fetching all bank details");
 
-        List<BankDetailsDTO> bankDetailsList = bankDetailsService.getAllBankDetails();
+        List<BankDetailsDto> bankDetailsList = bankDetailsService.getAllBankDetails();
 
         log.info("Total bank details retrieved: {}", bankDetailsList.size());
 
@@ -86,12 +86,12 @@ public class BankDetailsController {
     @ApiResponse(responseCode = "200", description = "Информация о реквизитах банка успешно обновлена")
     @ApiResponse(responseCode = "404", description = "Реквизиты банка не найдены")
     @PutMapping("/{id}")
-    public ResponseEntity<BankDetailsDTO> updateBankDetails(@PathVariable Long id,
-                                                            @Valid @RequestBody BankDetailsDTO bankDetailsDTO) {
+    public ResponseEntity<BankDetailsDto> updateBankDetails(@PathVariable Long id,
+                                                            @Valid @RequestBody BankDetailsDto bankDetailsDTO) {
         log.info("Updating bank details with ID: {}", id);
 
         bankDetailsDTO.setId(id);
-        BankDetailsDTO updatedBankDetails = bankDetailsService.updateBankDetails(bankDetailsDTO);
+        BankDetailsDto updatedBankDetails = bankDetailsService.updateBankDetails(bankDetailsDTO);
 
         log.info("Bank details updated successfully with ID: {}", updatedBankDetails.getId());
 

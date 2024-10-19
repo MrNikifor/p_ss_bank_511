@@ -1,6 +1,6 @@
 package com.bank.publicinfo.service;
 
-import com.bank.publicinfo.dto.BranchDTO;
+import com.bank.publicinfo.dto.BranchDto;
 import com.bank.publicinfo.exception.ResourceNotFoundException;
 import com.bank.publicinfo.mapper.AutoBranchMapper;
 import com.bank.publicinfo.model.Branch;
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,94 +24,74 @@ public class BranchServiceImpl implements BranchService {
 
     @Override
     @Transactional
-    public BranchDTO createBranch(BranchDTO branchDTO) {
-
+    public BranchDto createBranch(BranchDto branchDTO) {
         log.info("Creating new branch: {}", branchDTO);
-
-        if (branchDTO == null) {
-            log.error("Failed to create branch: BranchDTO is null");
-            throw new IllegalArgumentException("BranchDTO must not be null");
-        }
+        validateBranchDTO(branchDTO);
 
         Branch branch = autoBranchMapper.mapToBranch(branchDTO);
         Branch savedBranch = branchRepository.save(branch);
 
         log.info("Branch successfully created: {}", savedBranch);
-
-        return autoBranchMapper.mapToBranchDTO(savedBranch);
+        return autoBranchMapper.mapToBranchDto(savedBranch);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public BranchDTO getBranchById(Long id) {
+    public BranchDto getBranchById(Long id) {
         log.info("Fetching branch by ID: {}", id);
 
-        if (id == null) {
-            log.error("ID must not be null");
-            throw new IllegalArgumentException("ID must not be null");
-        }
-
-        Branch branch = branchRepository.findById(id)
+        Long validatedId = Optional.ofNullable(id)
                 .orElseThrow(() -> {
-                    log.error("Branch not found for ID: {}", id);
+                    log.error("ID must not be null");
+                    return new IllegalArgumentException("ID must not be null");
+                });
+
+        Branch branch = branchRepository.findById(validatedId)
+                .orElseThrow(() -> {
+                    log.error("Branch not found for ID: {}", validatedId);
                     return new ResourceNotFoundException("Branch not found");
                 });
 
         log.info("Branch found: {}", branch);
-
-        return autoBranchMapper.mapToBranchDTO(branch);
+        return autoBranchMapper.mapToBranchDto(branch);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<BranchDTO> getAllBranches() {
-
+    public List<BranchDto> getAllBranches() {
         log.info("Fetching all branches");
 
         List<Branch> branches = branchRepository.findAll();
-
         log.info("Total branches fetched: {}", branches.size());
 
         return branches.stream()
-                .map(autoBranchMapper::mapToBranchDTO)
+                .map(autoBranchMapper::mapToBranchDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public BranchDTO updateBranch(BranchDTO branchDTO) {
-
+    public BranchDto updateBranch(BranchDto branchDTO) {
         log.info("Updating branch: {}", branchDTO);
+        validateBranchDTO(branchDTO);
 
-        if (branchDTO == null) {
-            log.error("Failed to update branch: BranchDTO is null");
-            throw new IllegalArgumentException("BranchDTO must not be null");
-        }
-
-        Long id = branchDTO.getId();
-        if (id == null) {
-            log.error("ID must not be null");
-            throw new IllegalArgumentException("ID must not be null");
-        }
-
-        Branch existingBranch = branchRepository.findById(id)
+        Long validatedId = Optional.ofNullable(branchDTO.getId())
                 .orElseThrow(() -> {
-                    log.error("Branch not found for ID: {}", id);
+                    log.error("ID must not be null");
+                    return new IllegalArgumentException("ID must not be null");
+                });
 
+        Branch existingBranch = branchRepository.findById(validatedId)
+                .orElseThrow(() -> {
+                    log.error("Branch not found for ID: {}", validatedId);
                     return new ResourceNotFoundException("Branch not found");
                 });
 
-        existingBranch.setAddress(branchDTO.getAddress());
-        existingBranch.setPhoneNumber(branchDTO.getPhoneNumber());
-        existingBranch.setCity(branchDTO.getCity());
-        existingBranch.setStartOfWork(branchDTO.getStartOfWork());
-        existingBranch.setEndOfWork(branchDTO.getEndOfWork());
-
+        autoBranchMapper.updateBranchFromDto(branchDTO, existingBranch);
         Branch updatedBranch = branchRepository.save(existingBranch);
 
         log.info("Branch successfully updated: {}", updatedBranch);
-
-        return autoBranchMapper.mapToBranchDTO(updatedBranch);
+        return autoBranchMapper.mapToBranchDto(updatedBranch);
     }
 
     @Override
@@ -118,18 +99,25 @@ public class BranchServiceImpl implements BranchService {
     public void deleteBranch(Long id) {
         log.info("Deleting branch with ID: {}", id);
 
-        if (id == null) {
-            log.error("ID must not be null");
-            throw new IllegalArgumentException("ID must not be null");
-        }
+        Long validatedId = Optional.ofNullable(id)
+                .orElseThrow(() -> {
+                    log.error("ID must not be null");
+                    return new IllegalArgumentException("ID must not be null");
+                });
 
-        if (!branchRepository.existsById(id)) {
-            log.error("No branch found with ID: {}", id);
+        if (!branchRepository.existsById(validatedId)) {
+            log.error("No branch found with ID: {}", validatedId);
             throw new ResourceNotFoundException("Branch not found");
         }
 
-        branchRepository.deleteById(id);
+        branchRepository.deleteById(validatedId);
+        log.info("Branch with ID {} successfully deleted", validatedId);
+    }
 
-        log.info("Branch with ID {} successfully deleted", id);
+    private void validateBranchDTO(BranchDto branchDTO) {
+        if (branchDTO == null) {
+            log.error("Failed to process branch: BranchDTO is null");
+            throw new IllegalArgumentException("BranchDTO must not be null");
+        }
     }
 }

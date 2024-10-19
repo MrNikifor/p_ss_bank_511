@@ -1,6 +1,6 @@
 package com.bank.publicinfo.controllers;
 
-import com.bank.publicinfo.dto.LicenseDTO;
+import com.bank.publicinfo.dto.LicenseDto;
 import com.bank.publicinfo.service.LicenseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -37,11 +37,11 @@ public class LicenseController {
     @Operation(summary = "Создать новую лицензию")
     @ApiResponse(responseCode = "201", description = "Лицензия успешно создана")
     @PostMapping
-    public ResponseEntity<LicenseDTO> createLicense(@Valid @RequestBody LicenseDTO licenseDto) {
+    public ResponseEntity<LicenseDto> createLicense(@Valid @RequestBody LicenseDto licenseDto) {
 
         log.info("Creating license with data: {}", licenseDto);
 
-        LicenseDTO createdLicense = licenseService.createLicense(licenseDto);
+        LicenseDto createdLicense = licenseService.createLicense(licenseDto);
 
         log.info("License created successfully with ID: {}", createdLicense.getId());
 
@@ -52,11 +52,11 @@ public class LicenseController {
     @ApiResponse(responseCode = "200", description = "Лицензия успешно получена")
     @ApiResponse(responseCode = "404", description = "Лицензия не найдена")
     @GetMapping("/{id}")
-    public ResponseEntity<LicenseDTO> getLicenseById(@PathVariable Long id) {
+    public ResponseEntity<LicenseDto> getLicenseById(@PathVariable Long id) {
 
         log.info("Fetching license with ID: {}", id);
 
-        LicenseDTO license = licenseService.getLicenseById(id);
+        LicenseDto license = licenseService.getLicenseById(id);
 
         log.info("License retrieved successfully: {}", license);
 
@@ -66,11 +66,11 @@ public class LicenseController {
     @Operation(summary = "Получить список всех лицензий")
     @ApiResponse(responseCode = "200", description = "Список лицензий успешно получен")
     @GetMapping
-    public ResponseEntity<List<LicenseDTO>> getAllLicenses() {
+    public ResponseEntity<List<LicenseDto>> getAllLicenses() {
 
         log.info("Fetching all licenses");
 
-        List<LicenseDTO> licenses = licenseService.getAllLicenses();
+        List<LicenseDto> licenses = licenseService.getAllLicenses();
 
         log.info("Total licenses retrieved: {}", licenses.size());
 
@@ -81,12 +81,12 @@ public class LicenseController {
     @ApiResponse(responseCode = "204", description = "Информация о лицензии успешно обновлена")
     @ApiResponse(responseCode = "404", description = "Лицензия не найдена")
     @PutMapping("/{id}")
-    public ResponseEntity<LicenseDTO> updateLicense(@PathVariable Long id,
-                                                    @Valid @RequestBody LicenseDTO licenseDto) {
+    public ResponseEntity<LicenseDto> updateLicense(@PathVariable Long id,
+                                                    @Valid @RequestBody LicenseDto licenseDto) {
         log.info("Updating license with ID: {}", id);
 
         licenseDto.setId(id);
-        LicenseDTO updatedLicense = licenseService.updateLicense(licenseDto);
+        LicenseDto updatedLicense = licenseService.updateLicense(licenseDto);
 
         log.info("License updated successfully with ID: {}", updatedLicense.getId());
 

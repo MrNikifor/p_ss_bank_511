@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface AuditService {
     void createAudit(Audit audit);
     Optional<Audit> findFirstByEntityJsonStartingWith(String json);
-    Optional<Audit> findById(Long id);
+    Audit findById(Long id);
     List<Audit> findAll();
     void deleteById(Long id);
 }
