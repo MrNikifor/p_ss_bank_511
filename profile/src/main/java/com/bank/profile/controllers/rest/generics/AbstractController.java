@@ -7,8 +7,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -36,7 +38,7 @@ public abstract class AbstractController<ENTITY extends AbstractEntity, DTO, SER
     }
 
     @Override
-    @GetMapping("/delete")
+    @DeleteMapping("/delete")
     @Tag(name = "Удаление одной записи", description = "Удаление одной конкретной записи типа предпоследнего эндпоинта (id указывается в параметрах get запроса)")
     public ResponseEntity<HttpStatus> deleteById(@RequestParam(value = "id") Long id) {
         service.delete(id);
@@ -56,7 +58,7 @@ public abstract class AbstractController<ENTITY extends AbstractEntity, DTO, SER
     }
 
     @Override
-    @PostMapping("/update")
+    @PutMapping("/update")
     @Tag(name = "Изменение одной записи", description = "Изменение одной конкретной записи типа предпоследнего эндпоинта (id указывается в теле post запроса)")
     public ResponseEntity<HttpStatus> edit(@RequestBody DTO dto) {
         try {
