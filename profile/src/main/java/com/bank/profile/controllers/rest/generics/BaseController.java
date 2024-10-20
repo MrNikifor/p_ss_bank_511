@@ -22,9 +22,9 @@ public interface BaseController<ENTITY extends AbstractEntity, DTO> {
     ResponseEntity<HttpStatus> deleteById(@RequestParam(value = "id") Long id);
 
     @PostMapping
-    ResponseEntity<HttpStatus> save(@RequestBody DTO dto);
+    ResponseEntity<String> save(@RequestBody DTO dto);
 
     @PostMapping
-    ResponseEntity<HttpStatus> edit(@RequestBody DTO dto);
+    ResponseEntity<String> edit(@RequestBody DTO dto);
 
 }

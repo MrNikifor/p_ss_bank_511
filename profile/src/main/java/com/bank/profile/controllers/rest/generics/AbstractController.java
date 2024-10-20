@@ -48,24 +48,24 @@ public abstract class AbstractController<ENTITY extends AbstractEntity, DTO, SER
     @Override
     @PostMapping("/new")
     @Tag(name = "Создание одной записи", description = "Создание одной конкретной записи типа предпоследнего эндпоинта (id не указывается)")
-    public ResponseEntity<HttpStatus> save(@RequestBody DTO dto) {
+    public ResponseEntity<String> save(@RequestBody DTO dto) {
         try {
             service.create(dto);
         } catch (ValidationException e) {
-            return new ResponseEntity("Ошибка при создании сущности: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Ошибка при создании сущности: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        return ResponseEntity.ok(HttpStatus.OK);
+        return ResponseEntity.ok("Успешно создано");
     }
 
     @Override
     @PutMapping("/update")
     @Tag(name = "Изменение одной записи", description = "Изменение одной конкретной записи типа предпоследнего эндпоинта (id указывается в теле post запроса)")
-    public ResponseEntity<HttpStatus> edit(@RequestBody DTO dto) {
+    public ResponseEntity<String> edit(@RequestBody DTO dto) {
         try {
             service.update(dto);
         } catch (ValidationException e) {
-            return new ResponseEntity("Ошибка при обновлении сущности: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Ошибка при обновлении сущности: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        return ResponseEntity.ok(HttpStatus.OK);
+        return ResponseEntity.ok("Успешно обновлено");
     }
 }
