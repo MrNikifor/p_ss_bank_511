@@ -30,18 +30,10 @@ public class AuditAspect {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         try {
             String json = objectMapper.writeValueAsString(history);
-            Audit audit = new Audit();
-            audit.setEntityType(signature.getParameterTypes()[0].getSimpleName());
-            audit.setOperationType(signature.getMethod().getName());
-            audit.setCreatedBy("admin");
-            audit.setModifiedBy(null);
-            audit.setCreatedAt(LocalDateTime.now());
-            audit.setModifiedAt(null);
-            audit.setNewEntityJson(null);
-            audit.setEntityJson(json);
-            auditService.createAudit(audit);
+            createAndSave(signature, "admin", null, LocalDateTime.now(),
+                    null, null, json);
         } catch (JsonProcessingException e) {
-            log.error("Ошибка сериализации обЪекта History", e);
+            log.error("Ошибка сериализации объекта History", e);
         }
     }
 
@@ -51,18 +43,29 @@ public class AuditAspect {
         try {
             String json = objectMapper.writeValueAsString(history);
             Audit oldAudit = auditService.findAuditByJson("{\"id\":" + objectMapper.readTree(json).get("id") + ",");
-            Audit audit = new Audit();
-            audit.setEntityType(signature.getParameterTypes()[0].getSimpleName());
-            audit.setOperationType(signature.getMethod().getName());
-            audit.setCreatedBy(oldAudit.getCreatedBy());
-            audit.setModifiedBy("admin");
-            audit.setCreatedAt(oldAudit.getCreatedAt());
-            audit.setModifiedAt(LocalDateTime.now());
-            audit.setNewEntityJson(json);
-            audit.setEntityJson(oldAudit.getEntityJson());
-            auditService.createAudit(audit);
+            createAndSave(signature, oldAudit.getCreatedBy(), "admin", oldAudit.getCreatedAt(),
+                    LocalDateTime.now(), json, oldAudit.getEntityJson());
         } catch (JsonProcessingException e) {
             log.error("Ошибка сериализации обЪекта History", e);
         }
+    }
+
+    private void createAndSave(MethodSignature signature,
+                               String createdBy,
+                               String modifiedBy,
+                               LocalDateTime createdAt,
+                               LocalDateTime modifiedAt,
+                               String newEntityJson,
+                               String entityJson) {
+        Audit audit = new Audit();
+        audit.setEntityType(signature.getParameterTypes()[0].getSimpleName());
+        audit.setOperationType(signature.getMethod().getName());
+        audit.setCreatedBy(createdBy);
+        audit.setModifiedBy(modifiedBy);
+        audit.setCreatedAt(createdAt);
+        audit.setModifiedAt(modifiedAt);
+        audit.setNewEntityJson(newEntityJson);
+        audit.setEntityJson(entityJson);
+        auditService.createAudit(audit);
     }
 }

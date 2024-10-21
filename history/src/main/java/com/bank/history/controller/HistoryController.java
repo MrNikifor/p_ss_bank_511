@@ -57,7 +57,6 @@ public class HistoryController {
         return ResponseEntity.noContent().build();
     }
 
-
     @Operation(summary = "Get all histories")
     @ApiResponse(responseCode = "200", description = "List of histories")
     @GetMapping
