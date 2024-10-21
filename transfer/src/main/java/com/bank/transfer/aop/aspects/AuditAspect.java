@@ -39,34 +39,13 @@ public class AuditAspect {
     @Before("execution(* com.bank.transfer.service.*.create*(..)) && !@annotation(com.bank.transfer.annotation.NoAudit)")
     public void beforeCreateMethodExecution(JoinPoint joinPoint) {
 
-        log.info("before create method execution: {}", joinPoint.getSignature().getName());
-
-        String entityType = getEntityType(joinPoint);
-        String operationType = "CREATE";
-        String createdBy = "test";
-
-        auditThreadLocal.set(AuditEntity.builder()
-                .entityType(entityType)
-                .operationType(operationType)
-                .createdBy(createdBy)
-                .modifiedBy(null)
-                .modifiedAt(null)
-                .newEntityJson(null)
-                .build());
+        beforeMethodExecutionWorkingWithEntity(joinPoint, "CREATE", "test", null);
     }
 
     @Before("execution(* com.bank.transfer.service.*.update*(..)) && !@annotation(com.bank.transfer.annotation.NoAudit)")
     public void beforeUpdateMethodExecution(JoinPoint joinPoint) {
 
-        log.info("before update method execution: {}", joinPoint.getSignature().getName());
-
-        String operationType = "UPDATE";
-        String modifiedBy = "test1";
-
-        auditThreadLocal.set(AuditEntity.builder()
-                .operationType(operationType)
-                .modifiedBy(modifiedBy)
-                .build());
+        beforeMethodExecutionWorkingWithEntity(joinPoint, "UPDATE", null, "test1");
     }
 
     @SneakyThrows
@@ -124,6 +103,23 @@ public class AuditAspect {
         log.info("AuditAspect destroy completed");
     }
 
+    private void beforeMethodExecutionWorkingWithEntity(
+            JoinPoint joinPoint, String operationType, String createdBy, String modifiedBy) {
+
+        log.info("before {} method execution: {}", operationType.toLowerCase(), joinPoint.getSignature().getName());
+
+        String entityType = getEntityType(joinPoint);
+
+        auditThreadLocal.set(AuditEntity.builder()
+                .entityType(entityType)
+                .operationType(operationType)
+                .createdBy(createdBy)
+                .modifiedBy(modifiedBy)
+                .modifiedAt(null)
+                .newEntityJson(null)
+                .build());
+    }
+
     private String getEntityType(JoinPoint joinPoint) {
 
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
@@ -154,3 +150,4 @@ public class AuditAspect {
                 "AuditAspect.afterCreateMethodExecution.getEntityId");
     }
 }
+
