@@ -4,6 +4,7 @@ import com.bank.transfer.annotation.EntityType;
 import com.bank.transfer.entity.AuditEntity;
 import com.bank.transfer.exception.EntityIdNotFoundException;
 import com.bank.transfer.service.AuditService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -48,7 +49,6 @@ public class AuditAspect {
         beforeMethodExecutionWorkingWithEntity(joinPoint, "UPDATE", null, "test1");
     }
 
-    @SneakyThrows
     @AfterReturning(
             pointcut = "execution(* com.bank.transfer.service.*.create*(..)) && !@annotation(com.bank.transfer.annotation.NoAudit)",
             returning = "result")
@@ -59,15 +59,24 @@ public class AuditAspect {
         AuditEntity auditEntity = auditThreadLocal.get();
 
         if (auditEntity != null) {
-            auditEntity.setEntityJson(objectMapper.writeValueAsString(result));
-            auditEntity.setCreatedAt(LocalDateTime.now());
 
-            auditService.createAudit(auditEntity);
-            auditThreadLocal.remove();
+            try {
+                auditEntity.setEntityJson(objectMapper.writeValueAsString(result));
+                auditEntity.setCreatedAt(LocalDateTime.now());
+
+                auditService.createAudit(auditEntity);
+
+            } catch (JsonProcessingException e) {
+
+                log.error("Failed to serialize result into EntityJson", e);
+                throw new RuntimeException(e);
+
+            } finally {
+                auditThreadLocal.remove();
+            }
         }
     }
 
-    @SneakyThrows
     @AfterReturning(
             pointcut = "execution(* com.bank.transfer.service.*.update*(..)) && !@annotation(com.bank.transfer.annotation.NoAudit)",
             returning = "result")
@@ -87,13 +96,23 @@ public class AuditAspect {
             auditEntity.setCreatedAt(lastEntryAudit.getCreatedAt());
             auditEntity.setCreatedBy(lastEntryAudit.getCreatedBy());
             auditEntity.setEntityJson(lastEntryAudit.getEntityJson());
-            auditEntity.setNewEntityJson(objectMapper.writeValueAsString(result));
-            auditEntity.setModifiedAt(LocalDateTime.now());
 
-            auditService.createAudit(auditEntity);
+            try {
+
+                auditEntity.setNewEntityJson(objectMapper.writeValueAsString(result));
+                auditEntity.setModifiedAt(LocalDateTime.now());
+
+                auditService.createAudit(auditEntity);
+
+            } catch (JsonProcessingException e) {
+
+                log.error("Failed to serialize result into NewEntityJson", e);
+                throw new RuntimeException(e);
+
+            } finally {
+                auditThreadLocal.remove();
+            }
         }
-
-        auditThreadLocal.remove();
     }
 
     @PreDestroy
@@ -150,4 +169,3 @@ public class AuditAspect {
                 "AuditAspect.afterCreateMethodExecution.getEntityId");
     }
 }
-
