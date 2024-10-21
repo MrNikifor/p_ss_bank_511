@@ -4,7 +4,6 @@ import com.bank.transfer.annotation.NoAudit;
 import com.bank.transfer.entity.AuditEntity;
 import com.bank.transfer.exception.AuditRecordNotFoundException;
 import com.bank.transfer.repository.AuditRepository;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,6 @@ public class AuditServiceImpl implements AuditService {
         this.auditRepository = auditRepository;
     }
 
-    @SneakyThrows
     @Override
     public AuditEntity getLatestAuditByJson(Long id, String entityType) {
 
@@ -49,7 +47,6 @@ public class AuditServiceImpl implements AuditService {
         return auditRepository.findAll();
     }
 
-    @SneakyThrows
     @Override
     public AuditEntity getAuditById(Long id) {
 
@@ -75,7 +72,6 @@ public class AuditServiceImpl implements AuditService {
         auditRepository.save(auditEntity);
     }
 
-    @SneakyThrows
     @Transactional
     @Override
     public AuditEntity updateAudit(AuditEntity auditEntity, Long id) {
@@ -99,7 +95,6 @@ public class AuditServiceImpl implements AuditService {
         return auditRepository.save(auditEntityFromDB);
     }
 
-    @SneakyThrows
     @Transactional
     @Override
     public AuditEntity deleteAudit(Long id) {

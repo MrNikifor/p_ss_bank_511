@@ -3,7 +3,7 @@ package com.bank.transfer.exception;
 import lombok.Getter;
 
 @Getter
-public class AuditRecordNotFoundException extends Exception {
+public class AuditRecordNotFoundException extends RuntimeException {
 
     private final String location;
 
