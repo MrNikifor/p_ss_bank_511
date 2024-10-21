@@ -1,12 +1,12 @@
 package com.bank.transfer.aop.aspects;
 
 import com.bank.transfer.annotation.EntityType;
+import com.bank.transfer.dto.Identifiable;
 import com.bank.transfer.entity.AuditEntity;
 import com.bank.transfer.exception.EntityIdNotFoundException;
 import com.bank.transfer.service.AuditService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
-import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 
 @Aspect
@@ -153,16 +152,10 @@ public class AuditAspect {
         return parameterType.getSimpleName();
     }
 
-    @SneakyThrows
     private Long getEntityId(Object entity) {
 
-        for (Field field : entity.getClass().getDeclaredFields()) {
-
-            if (field.getName().equals("id")) {
-                field.setAccessible(true);
-
-                return (Long) field.get(entity);
-            }
+        if (entity instanceof Identifiable) {
+            return ((Identifiable) entity).getId();
         }
 
         throw new EntityIdNotFoundException("Entity does not have an ID field",

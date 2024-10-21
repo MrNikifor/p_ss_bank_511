@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @Builder
 @ToString
 @EntityType("PhoneTransfer")
-public class PhoneTransferDTO {
+public class PhoneTransferDTO implements Identifiable {
 
     Long id;
 
