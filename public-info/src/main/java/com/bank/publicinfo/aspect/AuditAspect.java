@@ -24,6 +24,19 @@ public class AuditAspect {
     private final AuditService auditService;
     private final ObjectMapper objectMapper;
 
+    // Константа для имени создателя
+    private static final String CREATED_BY = "Ivan Pereoridaroga";
+
+    // Общий метод для инициализации объекта Audit
+    private Audit initializeAudit(Object result, MethodSignature methodSignature) {
+        Audit audit = new Audit();
+        audit.setEntityType(result.getClass().getSimpleName());
+        audit.setOperationType(methodSignature.getName());
+        audit.setCreatedBy(CREATED_BY);
+        audit.setCreatedAt(LocalDateTime.now());
+        return audit;
+    }
+
     @AfterReturning(pointcut = "execution(* com.bank.publicinfo.service.*.create*(..))", returning = "result")
     public void afterResultCreateAdvice(JoinPoint joinPoint, Object result) {
         if (result == null) {
@@ -32,13 +45,10 @@ public class AuditAspect {
         }
 
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
-        Audit audit = new Audit();
+        Audit audit = initializeAudit(result, methodSignature); // Используем общий метод
+
         try {
             String entityJson = objectMapper.writeValueAsString(result);
-            audit.setEntityType(result.getClass().getSimpleName());
-            audit.setOperationType(methodSignature.getName());
-            audit.setCreatedBy("Ivan Pereoridaroga");
-            audit.setCreatedAt(LocalDateTime.now());
             audit.setEntityJson(entityJson);
             auditService.createAudit(audit);
 
@@ -64,10 +74,9 @@ public class AuditAspect {
 
             if (oldAudit.isPresent()) {
                 Audit oldAuditO = oldAudit.get();
-                audit.setEntityType(result.getClass().getSimpleName());
-                audit.setOperationType(methodSignature.getName());
+                audit = initializeAudit(result, methodSignature); // Используем общий метод
                 audit.setCreatedBy(oldAuditO.getCreatedBy());
-                audit.setModifiedBy("Ivan Pereoridaroga");
+                audit.setModifiedBy(CREATED_BY);
                 audit.setCreatedAt(oldAuditO.getCreatedAt());
                 audit.setModifiedAt(LocalDateTime.now());
                 audit.setNewEntityJson(json);
