@@ -6,16 +6,26 @@ management:
   server:
     port: 8191
   endpoint:
+    health:
+      show-details: always
+    prometheus:
+      enabled: true
     shutdown:
       enabled: true
   endpoints:
     web:
       exposure:
-        include: '*'
+        include: health, metrics, prometheus
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    tags:
+      application: ${spring.application.name}
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
-    username: user
+    username: postgres
     password: password
   liquibase:
     default-schema: transfer
