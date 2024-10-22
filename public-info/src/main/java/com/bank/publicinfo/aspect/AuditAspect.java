@@ -13,7 +13,9 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 import java.util.Optional;
+
 
 @Aspect
 @Component
@@ -24,18 +26,7 @@ public class AuditAspect {
     private final AuditService auditService;
     private final ObjectMapper objectMapper;
 
-    // Константа для имени создателя
     private static final String CREATED_BY = "Ivan Pereoridaroga";
-
-    // Общий метод для инициализации объекта Audit
-    private Audit initializeAudit(Object result, MethodSignature methodSignature) {
-        Audit audit = new Audit();
-        audit.setEntityType(result.getClass().getSimpleName());
-        audit.setOperationType(methodSignature.getName());
-        audit.setCreatedBy(CREATED_BY);
-        audit.setCreatedAt(LocalDateTime.now());
-        return audit;
-    }
 
     @AfterReturning(pointcut = "execution(* com.bank.publicinfo.service.*.create*(..))", returning = "result")
     public void afterResultCreateAdvice(JoinPoint joinPoint, Object result) {
@@ -44,18 +35,18 @@ public class AuditAspect {
             return;
         }
 
-        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
-        Audit audit = initializeAudit(result, methodSignature); // Используем общий метод
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
 
         try {
-            String entityJson = objectMapper.writeValueAsString(result);
-            audit.setEntityJson(entityJson);
-            auditService.createAudit(audit);
+            String json = objectMapper.writeValueAsString(result);
+
+            createAndSave(signature, CREATED_BY, null, LocalDateTime.now(), null, null, json);
 
             log.info("Created audit record for entity: {}", result.getClass().getSimpleName());
+
         } catch (JsonProcessingException e) {
-            log.error("Error auditing creation of record {}: {}", result, e.getMessage());
-            throw new RuntimeException(e);
+            log.error("JSON processing error for method {}: {}", signature.getName(), e.getMessage());
+            throw new RuntimeException("JSON processing error", e);
         }
     }
 
@@ -67,29 +58,41 @@ public class AuditAspect {
         }
 
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
-        Audit audit = new Audit();
+
         try {
             String json = objectMapper.writeValueAsString(result);
             Optional<Audit> oldAudit = auditService.findFirstByEntityJsonStartingWith("{\"id\":" + objectMapper.readTree(json).get("id") + ",");
 
             if (oldAudit.isPresent()) {
-                Audit oldAuditO = oldAudit.get();
-                audit = initializeAudit(result, methodSignature); // Используем общий метод
-                audit.setCreatedBy(oldAuditO.getCreatedBy());
-                audit.setModifiedBy(CREATED_BY);
-                audit.setCreatedAt(oldAuditO.getCreatedAt());
-                audit.setModifiedAt(LocalDateTime.now());
-                audit.setNewEntityJson(json);
-                audit.setEntityJson(oldAuditO.getEntityJson());
-                auditService.createAudit(audit);
-
+                createAndSave(methodSignature, oldAudit.get().getCreatedBy(), CREATED_BY, oldAudit.get().getCreatedAt(),
+                        LocalDateTime.now(), json, oldAudit.get().getEntityJson());
                 log.info("Updated audit record for entity: {}", result.getClass().getSimpleName());
             } else {
-                log.warn("No previous audit record found for entity ID: {}", objectMapper.readTree(json).get("id"));
+                log.warn("No previous audit record found for entity with ID: {}", objectMapper.readTree(json).get("id"));
             }
         } catch (JsonProcessingException e) {
-            log.error("Error auditing update of record {}: {}", result, e.getMessage());
-            throw new RuntimeException(e);
+            log.error("JSON processing error for method {}: {}", methodSignature.getName(), e.getMessage());
+            throw new RuntimeException("JSON processing error", e);
         }
+    }
+
+    private void createAndSave(MethodSignature signature,
+                               String createdBy,
+                               String modifiedBy,
+                               LocalDateTime createdAt,
+                               LocalDateTime modifiedAt,
+                               String newEntityJson,
+                               String entityJson) {
+        Audit audit = new Audit();
+        audit.setEntityType(signature.getParameterTypes()[0].getSimpleName());
+        audit.setOperationType(signature.getMethod().getName());
+        audit.setCreatedBy(createdBy);
+        audit.setModifiedBy(modifiedBy);
+        audit.setCreatedAt(createdAt);
+        audit.setModifiedAt(modifiedAt);
+        audit.setNewEntityJson(newEntityJson);
+        audit.setEntityJson(entityJson);
+
+        auditService.createAudit(audit);
     }
 }
