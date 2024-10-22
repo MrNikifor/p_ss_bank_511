@@ -44,7 +44,7 @@ public class ATMServiceImpl implements ATMService {
         Long validatedId = Optional.ofNullable(id)
                 .orElseThrow(() -> {
                     log.error("ID must not be null");
-                    return new IllegalArgumentException("ID must not be null");
+                    return new ResourceNotFoundException("ID must not be null");
                 });
 
         ATM atm = atmRepository.findById(validatedId)
@@ -77,7 +77,7 @@ public class ATMServiceImpl implements ATMService {
         Long validatedId = Optional.ofNullable(atmDTO.getId())
                 .orElseThrow(() -> {
                     log.error("ID must not be null");
-                    return new IllegalArgumentException("ID must not be null");
+                    return new ResourceNotFoundException("ID must not be null");
                 });
 
         ATM existingATM = atmRepository.findById(validatedId)
@@ -101,7 +101,7 @@ public class ATMServiceImpl implements ATMService {
         Long validatedId = Optional.ofNullable(id)
                 .orElseThrow(() -> {
                     log.error("ID must not be null");
-                    return new IllegalArgumentException("ID must not be null");
+                    return new ResourceNotFoundException("ID must not be null");
                 });
 
         if (!atmRepository.existsById(validatedId)) {
@@ -120,7 +120,7 @@ public class ATMServiceImpl implements ATMService {
         Long validatedId = Optional.ofNullable(id)
                 .orElseThrow(() -> {
                     log.error("ID must not be null");
-                    return new IllegalArgumentException("ID must not be null");
+                    return new ResourceNotFoundException("ID must not be null");
                 });
 
         ATM atm = atmRepository.findById(validatedId)
@@ -149,7 +149,7 @@ public class ATMServiceImpl implements ATMService {
     private void validateAtmDTO(ATMDto atmDTO) {
         if (atmDTO == null) {
             log.error("Failed to process ATM: ATMDTO is null");
-            throw new IllegalArgumentException("ATMDTO must not be null");
+            throw new ResourceNotFoundException("ATMDTO must not be null");
         }
     }
 }

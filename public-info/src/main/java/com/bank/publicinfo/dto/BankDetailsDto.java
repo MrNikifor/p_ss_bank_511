@@ -1,32 +1,36 @@
 package com.bank.publicinfo.dto;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class BankDetailsDto {
 
     private Long id;
 
-    private long bik;
+    private Long bik;
 
-    private long inn;
+    private Long inn;
 
-    private long kpp;
+    private Long kpp;
 
     private int corAccount;
 
     @Size(max = 180, message = "City name must be less than 180 characters")
     private String city;
 
+    @NotNull(message = "Joint stock company must not be null")
     @Size(max = 15, message = "Joint stock company name must be less than 15 characters")
     private String jointStockCompany;
 

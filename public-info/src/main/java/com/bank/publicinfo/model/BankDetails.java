@@ -2,6 +2,7 @@ package com.bank.publicinfo.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,13 +31,13 @@ public class BankDetails {
     private Long id; // Уникальный идентификатор банковских деталей
 
     @Column(name = "bik", unique = true, nullable = false)
-    private long bik; // БИК (Банковский Идентификационный Код)
+    private Long bik; // БИК (Банковский Идентификационный Код)
 
     @Column(name = "inn", unique = true, nullable = false)
-    private long inn; // ИНН (Идентификационный Номер Налогоплательщика)
+    private Long inn; // ИНН (Идентификационный Номер Налогоплательщика)
 
     @Column(name = "kpp", unique = true, nullable = false)
-    private long kpp; // КПП (Код Причины Поставки)
+    private Long kpp; // КПП (Код Причины Поставки)
 
     @Column(name = "cor_account", unique = true, nullable = false)
     private int corAccount; // Корреспондентский счет банка

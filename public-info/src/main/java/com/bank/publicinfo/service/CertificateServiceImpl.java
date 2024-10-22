@@ -54,7 +54,7 @@ public class CertificateServiceImpl implements CertificateService {
         Long validatedId = Optional.ofNullable(id)
                 .orElseThrow(() -> {
                     log.error("ID must not be null");
-                    return new IllegalArgumentException("ID must not be null");
+                    return new ResourceNotFoundException("ID must not be null");
                 });
 
         Certificate certificate = certificateRepository.findById(validatedId)
@@ -89,7 +89,7 @@ public class CertificateServiceImpl implements CertificateService {
         Long validatedId = Optional.ofNullable(certificateDTO.getId())
                 .orElseThrow(() -> {
                     log.error("ID must not be null");
-                    return new IllegalArgumentException("ID must not be null");
+                    return new ResourceNotFoundException("ID must not be null");
                 });
 
         Certificate existingCertificate = certificateRepository.findById(validatedId)
@@ -113,7 +113,7 @@ public class CertificateServiceImpl implements CertificateService {
         Long validatedId = Optional.ofNullable(id)
                 .orElseThrow(() -> {
                     log.error("ID must not be null");
-                    return new IllegalArgumentException("ID must not be null");
+                    return new ResourceNotFoundException("ID must not be null");
                 });
 
         if (!certificateRepository.existsById(validatedId)) {
@@ -128,7 +128,7 @@ public class CertificateServiceImpl implements CertificateService {
     private void validateCertificateDTO(CertificateDto certificateDTO) {
         if (certificateDTO == null) {
             log.error("Failed to process certificate: CertificateDTO is null");
-            throw new IllegalArgumentException("CertificateDTO must not be null");
+            throw new ResourceNotFoundException("CertificateDTO must not be null");
         }
     }
 }

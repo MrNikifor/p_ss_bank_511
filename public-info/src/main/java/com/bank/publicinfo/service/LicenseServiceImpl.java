@@ -54,7 +54,7 @@ public class LicenseServiceImpl implements LicenseService {
         Long validatedId = Optional.ofNullable(id)
                 .orElseThrow(() -> {
                     log.error("ID must not be null");
-                    return new IllegalArgumentException("ID must not be null");
+                    return new ResourceNotFoundException("ID must not be null");
                 });
 
         License license = licenseRepository.findById(validatedId)
@@ -89,7 +89,7 @@ public class LicenseServiceImpl implements LicenseService {
         Long validatedId = Optional.ofNullable(licenseDTO.getId())
                 .orElseThrow(() -> {
                     log.error("ID must not be null");
-                    return new IllegalArgumentException("ID must not be null");
+                    return new ResourceNotFoundException("ID must not be null");
                 });
 
         License existingLicense = licenseRepository.findById(validatedId)
@@ -113,7 +113,7 @@ public class LicenseServiceImpl implements LicenseService {
         Long validatedId = Optional.ofNullable(id)
                 .orElseThrow(() -> {
                     log.error("ID must not be null");
-                    return new IllegalArgumentException("ID must not be null");
+                    return new ResourceNotFoundException("ID must not be null");
                 });
 
         if (!licenseRepository.existsById(validatedId)) {
@@ -128,7 +128,7 @@ public class LicenseServiceImpl implements LicenseService {
     private void validateLicenseDTO(LicenseDto licenseDTO) {
         if (licenseDTO == null) {
             log.error("Failed to process license: LicenseDTO is null");
-            throw new IllegalArgumentException("LicenseDTO must not be null");
+            throw new ResourceNotFoundException("LicenseDTO must not be null");
         }
     }
 }

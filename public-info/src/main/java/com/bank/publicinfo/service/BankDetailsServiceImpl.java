@@ -49,7 +49,7 @@ public class BankDetailsServiceImpl implements BankDetailsService {
                 .orElseThrow(() -> {
                     log.error("ID must not be null");
 
-                    return new IllegalArgumentException("ID must not be null");
+                    return new ResourceNotFoundException("ID must not be null");
                 });
 
         BankDetails bankDetails = bankDetailsRepository.findById(validatedId)
@@ -92,7 +92,7 @@ public class BankDetailsServiceImpl implements BankDetailsService {
                 .orElseThrow(() -> {
                     log.error("ID must not be null");
 
-                    return new IllegalArgumentException("ID must not be null");
+                    return new ResourceNotFoundException("ID must not be null");
                 });
 
         BankDetails existingBankDetail = bankDetailsRepository.findById(validatedId)
@@ -121,7 +121,7 @@ public class BankDetailsServiceImpl implements BankDetailsService {
                 .orElseThrow(() -> {
                     log.error("ID must not be null");
 
-                    return new IllegalArgumentException("ID must not be null");
+                    return new ResourceNotFoundException("ID must not be null");
                 });
 
         if (!bankDetailsRepository.existsById(validatedId)) {
@@ -140,7 +140,15 @@ public class BankDetailsServiceImpl implements BankDetailsService {
         if (bankDetailsDTO == null) {
             log.error("Failed to process bank details: BankDetailsDTO is null");
 
-            throw new IllegalArgumentException("Bank Details DTO must not be null");
+            throw new ResourceNotFoundException("Bank Details DTO must not be null");
+        }
+        if (bankDetailsDTO.getCity() == null) {
+            log.error("Failed to process bank details: City is null");
+            throw new ResourceNotFoundException("City must not be null");
+        }
+        if (bankDetailsDTO.getName() == null || bankDetailsDTO.getName().isEmpty()) {
+            log.error("Failed to process bank details: Bank name is null or empty");
+            throw new ResourceNotFoundException("Bank name must not be null or empty");
         }
     }
 }

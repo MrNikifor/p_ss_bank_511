@@ -4,6 +4,7 @@ import com.bank.publicinfo.dto.BankDetailsDto;
 import com.bank.publicinfo.service.BankDetailsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -40,11 +40,6 @@ public class BankDetailsController {
     public ResponseEntity<BankDetailsDto> createBankDetails(@Valid @RequestBody BankDetailsDto bankDetailsDto) {
 
         log.info("Creating bank details with data: {}", bankDetailsDto);
-
-        if (bankDetailsDto.getJointStockCompany() == null) {
-            log.error("Joint stock company is null");
-            throw new IllegalArgumentException("Joint stock company must not be null");
-        }
 
         BankDetailsDto createdBankDetails = bankDetailsService.createBankDetails(bankDetailsDto);
 

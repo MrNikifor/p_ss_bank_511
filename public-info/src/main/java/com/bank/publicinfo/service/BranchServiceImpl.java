@@ -43,7 +43,7 @@ public class BranchServiceImpl implements BranchService {
         Long validatedId = Optional.ofNullable(id)
                 .orElseThrow(() -> {
                     log.error("ID must not be null");
-                    return new IllegalArgumentException("ID must not be null");
+                    return new ResourceNotFoundException("ID must not be null");
                 });
 
         Branch branch = branchRepository.findById(validatedId)
@@ -78,7 +78,7 @@ public class BranchServiceImpl implements BranchService {
         Long validatedId = Optional.ofNullable(branchDTO.getId())
                 .orElseThrow(() -> {
                     log.error("ID must not be null");
-                    return new IllegalArgumentException("ID must not be null");
+                    return new ResourceNotFoundException("ID must not be null");
                 });
 
         Branch existingBranch = branchRepository.findById(validatedId)
@@ -102,7 +102,7 @@ public class BranchServiceImpl implements BranchService {
         Long validatedId = Optional.ofNullable(id)
                 .orElseThrow(() -> {
                     log.error("ID must not be null");
-                    return new IllegalArgumentException("ID must not be null");
+                    return new ResourceNotFoundException("ID must not be null");
                 });
 
         if (!branchRepository.existsById(validatedId)) {
@@ -117,7 +117,7 @@ public class BranchServiceImpl implements BranchService {
     private void validateBranchDTO(BranchDto branchDTO) {
         if (branchDTO == null) {
             log.error("Failed to process branch: BranchDTO is null");
-            throw new IllegalArgumentException("BranchDTO must not be null");
+            throw new ResourceNotFoundException("BranchDTO must not be null");
         }
     }
 }
