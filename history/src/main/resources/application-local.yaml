@@ -1,17 +1,23 @@
 server:
   port: 8088
   servlet:
-    context-path: /api/history
+    context-path: /
 management:
   server:
     port: 8188
   endpoint:
+    prometheus:
+      enabled: true
     shutdown:
       enabled: true
   endpoints:
     web:
       exposure:
         include: '*'
+  metrics:
+    export:
+      prometheus:
+        enabled: true
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5433/postgres
